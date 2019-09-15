@@ -1,0 +1,69 @@
+sdwresponsegridcontrol.properties.test
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=${gridSASHome}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=${planPath}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=${installationData}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsf}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=${configurationDirectory}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=${fqdnHostname}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=${hostname}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=${metadataServerFqdnHostname}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| oma.person.admin.login.passwd.internal.as=.*| oma.person.admin.login.passwd.internal.as=${sasUserPassword}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| oma.person.trustusr.login.passwd.internal.as=.*| oma.person.trustusr.login.passwd.internal.as=${sasUserPassword}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| oma.person.gensrvusr.login.passwd=.*| oma.person.gensrvusr.login.passwd=${sasUserPassword}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| iomsrv.webinfdsvrc.host=.*| iomsrv.webinfdsvrc.host=${hostname}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| iomsrv.webinfdsvrc.passwd=.*| iomsrv.webinfdsvrc.passwd=${sasUserPassword}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| server.grdcctlsvr.shared.dir.path=.*| server.grdcctlsvr.shared.dir.path=${grdcctlsvrSharedDirPath}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| server.platformpm.host=.*| server.platformpm.host=${hostname}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${hostname}|g" sdwresponsegridcontrol.properties.test
+sed -i .bak "s| hyperagntc.admin.passwd.as=.*| hyperagntc.admin.passwd.as=${sasUserPassword}|g" sdwresponsegridcontrol.properties.test
+
+sdwresponsegridnode2.properties.test
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=${gridSASHome}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=${planPath}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=${installationData}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsf}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=${configurationDirectory}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=${fqdnHostname}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=${hostname}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=${metadataServerFqdnHostname}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| oma.person.admin.login.passwd.internal.as=.*| oma.person.admin.login.passwd.internal.as=${sasUserPassword}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${hostname}|g" sdwresponsegridnode2.properties.test
+sed -i .bak "s| hyperagntc.admin.passwd.as=.*| hyperagntc.admin.passwd.as=${sasUserPassword}|g" sdwresponsegridnode2.properties.test
+
+sdwresponsemeta0.properties.test
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=${metadataSASHome}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=${planPath}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=${installationData}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=${configurationDirectory}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=${fqdnHostname}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=${hostname}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=${metadataServerFqdnHostname}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| oma.person.installer.login.passwd=.*| oma.person.installer.login.passwd=${sasUserPassword}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| oma.person.admin.login.passwd.internal.ms=.*| oma.person.admin.login.passwd.internal.ms=${sasUserPassword}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| oma.person.trustusr.login.passwd.internal.ms=.*| oma.person.trustusr.login.passwd.internal.ms=${sasUserPassword}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${hostname}|g" sdwresponsemeta0.properties.test
+sed -i .bak "s| hyperagntc.admin.passwd=.*| hyperagntc.admin.passwd=${sasUserPassword}|g" sdwresponsemeta0.properties.test
+
+sdwresponsemidtier0.properties.test
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=${midTierSASHome}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=${planPath}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=${installationData}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsf}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=${configurationDirectory}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=${fqdnHostname}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=${hostname}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=${metadataServerFqdnHostname}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| oma.person.admin.login.passwd.internal.as=.*| oma.person.admin.login.passwd.internal.as=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| oma.person.trustusr.login.passwd.internal.as=.*| oma.person.trustusr.login.passwd.internal.as=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| oma.person.webanon.login.passwd.internal=.*| oma.person.webanon.login.passwd.internal=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| webapp.theme.host=.*| webapp.theme.host=${hostname}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| iomsrv.httpserver.repository.dir=.*| iomsrv.httpserver.repository.dir=${midTierSASConfig}/Lev1/AppData/SASContentServer/Repository|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| webappsrv.dbms.admin.passwd=.*| webappsrv.dbms.admin.passwd=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| webappsrv.dbms.passwd=.*| webappsrv.dbms.passwd=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| admappmid.dbms.passwd=.*| admappmid.dbms.passwd=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| vfabrchyperc.server.admin.passwd.as=.*| vfabrchyperc.server.admin.passwd.as=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| vfabrchyperc.server.database.password=.*| vfabrchyperc.server.database.password=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| vfabrchyperc.server.encryption.key=.*| vfabrchyperc.server.encryption.key=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| evmkitevp.db.passwd=.*| evmkitevp.db.passwd=${sasUserPassword}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| platformpws.platformlsf.conf.dir=.*| platformpws.platformlsf.conf.dir=${gridSASAppLsf}|g" sdwresponsemidtier0.properties.test
+sed -i .bak "s| platformpws.dbms.passwd=.*| platformpws.dbms.passwd=${sasUserPassword}|g" sdwresponsemidtier0.properties.test

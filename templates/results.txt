@@ -1,0 +1,146 @@
+sdwresponsegridcontrol.properties.test
+SAS_HOME=
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=123|g" sdwresponsegridcontrol.properties.test
+CUSTOMIZED_PLAN_PATH=
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=123|g" sdwresponsegridcontrol.properties.test
+STANDARD_PLAN_NAME=
+sed -i .bak "s| STANDARD_PLAN_NAME=.*| STANDARD_PLAN_NAME=123|g" sdwresponsegridcontrol.properties.test
+SAS_INSTALLATION_DATA=
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=123|g" sdwresponsegridcontrol.properties.test
+REQUIRED_SOFTWARE_PLATFORMLSF=
+sed -i .bak "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=123|g" sdwresponsegridcontrol.properties.test
+CONFIGURATION_DIRECTORY=
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.fqdn.host.name=
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.host.name=
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=123|g" sdwresponsegridcontrol.properties.test
+MIGRATION_PACKAGE=
+sed -i .bak "s| MIGRATION_PACKAGE=.*| MIGRATION_PACKAGE=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.metadatasrv.host=
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=123|g" sdwresponsegridcontrol.properties.test
+oma.person.admin.login.passwd.internal.as=
+sed -i .bak "s| oma.person.admin.login.passwd.internal.as=.*| oma.person.admin.login.passwd.internal.as=123|g" sdwresponsegridcontrol.properties.test
+oma.person.trustusr.login.passwd.internal.as=
+sed -i .bak "s| oma.person.trustusr.login.passwd.internal.as=.*| oma.person.trustusr.login.passwd.internal.as=123|g" sdwresponsegridcontrol.properties.test
+oma.person.gensrvusr.login.passwd=
+sed -i .bak "s| oma.person.gensrvusr.login.passwd=.*| oma.person.gensrvusr.login.passwd=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.webinfdsvrc.host=
+sed -i .bak "s| iomsrv.webinfdsvrc.host=.*| iomsrv.webinfdsvrc.host=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.webinfdsvrc.passwd=
+sed -i .bak "s| iomsrv.webinfdsvrc.passwd=.*| iomsrv.webinfdsvrc.passwd=123|g" sdwresponsegridcontrol.properties.test
+server.grdcctlsvr.shared.dir.path=
+sed -i .bak "s| server.grdcctlsvr.shared.dir.path=.*| server.grdcctlsvr.shared.dir.path=123|g" sdwresponsegridcontrol.properties.test
+server.platformpm.host=
+sed -i .bak "s| server.platformpm.host=.*| server.platformpm.host=123|g" sdwresponsegridcontrol.properties.test
+hyperagntc.agent.setup.camIP=
+sed -i .bak "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=123|g" sdwresponsegridcontrol.properties.test
+hyperagntc.admin.passwd.as=
+sed -i .bak "s| hyperagntc.admin.passwd.as=.*| hyperagntc.admin.passwd.as=123|g" sdwresponsegridcontrol.properties.test
+sdwresponsegridnode2.properties.test
+SAS_HOME=
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=123|g" sdwresponsegridcontrol.properties.test
+CUSTOMIZED_PLAN_PATH=
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=123|g" sdwresponsegridcontrol.properties.test
+STANDARD_PLAN_NAME=
+sed -i .bak "s| STANDARD_PLAN_NAME=.*| STANDARD_PLAN_NAME=123|g" sdwresponsegridcontrol.properties.test
+SAS_INSTALLATION_DATA=
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=123|g" sdwresponsegridcontrol.properties.test
+REQUIRED_SOFTWARE_PLATFORMLSF=
+sed -i .bak "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=123|g" sdwresponsegridcontrol.properties.test
+CONFIGURATION_DIRECTORY=
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.fqdn.host.name=
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.host.name=
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=123|g" sdwresponsegridcontrol.properties.test
+MIGRATION_PACKAGE=
+sed -i .bak "s| MIGRATION_PACKAGE=.*| MIGRATION_PACKAGE=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.metadatasrv.host=
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=123|g" sdwresponsegridcontrol.properties.test
+oma.person.admin.login.passwd.internal.as=
+sed -i .bak "s| oma.person.admin.login.passwd.internal.as=.*| oma.person.admin.login.passwd.internal.as=123|g" sdwresponsegridcontrol.properties.test
+hyperagntc.agent.setup.camIP=
+sed -i .bak "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=123|g" sdwresponsegridcontrol.properties.test
+hyperagntc.admin.passwd.as=
+sed -i .bak "s| hyperagntc.admin.passwd.as=.*| hyperagntc.admin.passwd.as=123|g" sdwresponsegridcontrol.properties.test
+sdwresponsemeta0.properties.test
+SAS_HOME=
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=123|g" sdwresponsegridcontrol.properties.test
+CUSTOMIZED_PLAN_PATH=
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=123|g" sdwresponsegridcontrol.properties.test
+STANDARD_PLAN_NAME=
+sed -i .bak "s| STANDARD_PLAN_NAME=.*| STANDARD_PLAN_NAME=123|g" sdwresponsegridcontrol.properties.test
+SAS_INSTALLATION_DATA=
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=123|g" sdwresponsegridcontrol.properties.test
+CONFIGURATION_DIRECTORY=
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.fqdn.host.name=
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.host.name=
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=123|g" sdwresponsegridcontrol.properties.test
+MIGRATION_PACKAGE=
+sed -i .bak "s| MIGRATION_PACKAGE=.*| MIGRATION_PACKAGE=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.metadatasrv.host=
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=123|g" sdwresponsegridcontrol.properties.test
+oma.person.installer.login.passwd=
+sed -i .bak "s| oma.person.installer.login.passwd=.*| oma.person.installer.login.passwd=123|g" sdwresponsegridcontrol.properties.test
+oma.person.admin.login.passwd.internal.ms=
+sed -i .bak "s| oma.person.admin.login.passwd.internal.ms=.*| oma.person.admin.login.passwd.internal.ms=123|g" sdwresponsegridcontrol.properties.test
+oma.person.trustusr.login.passwd.internal.ms=
+sed -i .bak "s| oma.person.trustusr.login.passwd.internal.ms=.*| oma.person.trustusr.login.passwd.internal.ms=123|g" sdwresponsegridcontrol.properties.test
+hyperagntc.agent.setup.camIP=
+sed -i .bak "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=123|g" sdwresponsegridcontrol.properties.test
+hyperagntc.admin.passwd=
+sed -i .bak "s| hyperagntc.admin.passwd=.*| hyperagntc.admin.passwd=123|g" sdwresponsegridcontrol.properties.test
+sdwresponsemidtier0.properties.test
+SAS_HOME=
+sed -i .bak "s| SAS_HOME=.*| SAS_HOME=123|g" sdwresponsegridcontrol.properties.test
+CUSTOMIZED_PLAN_PATH=
+sed -i .bak "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=123|g" sdwresponsegridcontrol.properties.test
+STANDARD_PLAN_NAME=
+sed -i .bak "s| STANDARD_PLAN_NAME=.*| STANDARD_PLAN_NAME=123|g" sdwresponsegridcontrol.properties.test
+SAS_INSTALLATION_DATA=
+sed -i .bak "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=123|g" sdwresponsegridcontrol.properties.test
+REQUIRED_SOFTWARE_PLATFORMLSF=
+sed -i .bak "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=123|g" sdwresponsegridcontrol.properties.test
+CONFIGURATION_DIRECTORY=
+sed -i .bak "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.fqdn.host.name=
+sed -i .bak "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=123|g" sdwresponsegridcontrol.properties.test
+os.localhost.host.name=
+sed -i .bak "s| os.localhost.host.name=.*| os.localhost.host.name=123|g" sdwresponsegridcontrol.properties.test
+MIGRATION_PACKAGE=
+sed -i .bak "s| MIGRATION_PACKAGE=.*| MIGRATION_PACKAGE=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.metadatasrv.host=
+sed -i .bak "s| iomsrv.metadatasrv.host=.*| iomsrv.metadatasrv.host=123|g" sdwresponsegridcontrol.properties.test
+oma.person.admin.login.passwd.internal.as=
+sed -i .bak "s| oma.person.admin.login.passwd.internal.as=.*| oma.person.admin.login.passwd.internal.as=123|g" sdwresponsegridcontrol.properties.test
+oma.person.trustusr.login.passwd.internal.as=
+sed -i .bak "s| oma.person.trustusr.login.passwd.internal.as=.*| oma.person.trustusr.login.passwd.internal.as=123|g" sdwresponsegridcontrol.properties.test
+oma.person.webanon.login.passwd.internal=
+sed -i .bak "s| oma.person.webanon.login.passwd.internal=.*| oma.person.webanon.login.passwd.internal=123|g" sdwresponsegridcontrol.properties.test
+sas.web.csrf.referers.knownhosts=
+sed -i .bak "s| sas.web.csrf.referers.knownhosts=.*| sas.web.csrf.referers.knownhosts=123|g" sdwresponsegridcontrol.properties.test
+webapp.theme.host=
+sed -i .bak "s| webapp.theme.host=.*| webapp.theme.host=123|g" sdwresponsegridcontrol.properties.test
+iomsrv.httpserver.repository.dir=
+sed -i .bak "s| iomsrv.httpserver.repository.dir=.*| iomsrv.httpserver.repository.dir=123|g" sdwresponsegridcontrol.properties.test
+webappsrv.dbms.admin.passwd=
+sed -i .bak "s| webappsrv.dbms.admin.passwd=.*| webappsrv.dbms.admin.passwd=123|g" sdwresponsegridcontrol.properties.test
+webappsrv.dbms.passwd=
+sed -i .bak "s| webappsrv.dbms.passwd=.*| webappsrv.dbms.passwd=123|g" sdwresponsegridcontrol.properties.test
+admappmid.dbms.passwd=
+sed -i .bak "s| admappmid.dbms.passwd=.*| admappmid.dbms.passwd=123|g" sdwresponsegridcontrol.properties.test
+vfabrchyperc.server.admin.passwd.as=
+sed -i .bak "s| vfabrchyperc.server.admin.passwd.as=.*| vfabrchyperc.server.admin.passwd.as=123|g" sdwresponsegridcontrol.properties.test
+vfabrchyperc.server.database.password=
+sed -i .bak "s| vfabrchyperc.server.database.password=.*| vfabrchyperc.server.database.password=123|g" sdwresponsegridcontrol.properties.test
+vfabrchyperc.server.encryption.key=
+sed -i .bak "s| vfabrchyperc.server.encryption.key=.*| vfabrchyperc.server.encryption.key=123|g" sdwresponsegridcontrol.properties.test
+evmkitevp.db.passwd=
+sed -i .bak "s| evmkitevp.db.passwd=.*| evmkitevp.db.passwd=123|g" sdwresponsegridcontrol.properties.test
+platformpws.platformlsf.conf.dir=
+sed -i .bak "s| platformpws.platformlsf.conf.dir=.*| platformpws.platformlsf.conf.dir=123|g" sdwresponsegridcontrol.properties.test
+platformpws.dbms.passwd=
+sed -i .bak "s| platformpws.dbms.passwd=.*| platformpws.dbms.passwd=123|g" sdwresponsegridcontrol.properties.test

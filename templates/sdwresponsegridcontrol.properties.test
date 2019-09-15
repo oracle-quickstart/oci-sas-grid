@@ -1,0 +1,309 @@
+# Response file for the SAS Deployment Wizard
+# Created: May 23, 2019 4:54:48 PM
+#
+# Responses with multiple options are separated with / characters.
+
+# Select Deployment Task
+# Select the deployment task you would like to perform.
+#START_TASK=install/depot/manage
+ START_TASK=install
+
+# Specify SAS Home
+# Specify the location where SAS software will be installed on this machine.
+#SAS_HOME=<full path>
+#SAS_HOME=/mnt/sas/nfs/SASHOME2
+ SAS_HOME=
+
+# Select Deployment Type
+# Select the type of deployment you want to perform.
+#DEPLOYMENT_TYPE=planned/nonplanned/additional
+ DEPLOYMENT_TYPE=planned
+#PLANNED_INSTALL=yes/no
+ PLANNED_INSTALL=yes
+#PLANNED_CONFIGURE=yes/no
+ PLANNED_CONFIGURE=yes
+
+# Specify Deployment Plan
+# Specify a customized or standard deployment plan.
+#PLAN_TYPE=customized/standard
+ PLAN_TYPE=customized
+#CUSTOMIZED_PLAN_PATH=<full path - only if PLAN_TYPE=customized>
+#CUSTOMIZED_PLAN_PATH=/mnt/sas/nfs/SASDEPOT/SAS_Depot/plan_files/plan.xml
+ CUSTOMIZED_PLAN_PATH=
+#STANDARD_PLAN_NAME=<standard plan name - only if PLAN_TYPE=standard>
+ STANDARD_PLAN_NAME=
+
+# Select Deployment Step and Products to Install
+# Select the products you want to install on this machine.
+#MACHINE_SELECTION=<machine name>
+# or
+#MACHINE_SELECTION=step <#>
+ MACHINE_SELECTION=step 3
+ PRODUCT_SELECTION1=deployagent
+ PRODUCT_SELECTION2=deployagtclt
+ PRODUCT_SELECTION3=sasinstall
+ PRODUCT_SELECTION4=hpsdoc
+ PRODUCT_SELECTION5=webinfdsvr
+ PRODUCT_SELECTION6=platfmltypes
+ PRODUCT_SELECTION7=mgmtconsole
+ PRODUCT_SELECTION8=webinfdsvrc
+ PRODUCT_SELECTION9=wipclient
+ PRODUCT_SELECTION10=dprosmc
+ PRODUCT_SELECTION11=gridsmc
+ PRODUCT_SELECTION12=wipschedsvcs
+ PRODUCT_SELECTION13=evmkitsvr
+ PRODUCT_SELECTION14=webinfdjdbc
+ PRODUCT_SELECTION15=webinfdodbc
+ PRODUCT_SELECTION16=hyperagnt
+ PRODUCT_SELECTION17=evmclient
+ PRODUCT_SELECTION18=dproserver
+ PRODUCT_SELECTION19=dproclient
+ PRODUCT_SELECTION20=ttfontsvert
+ PRODUCT_SELECTION21=grodscrender
+ PRODUCT_SELECTION22=grsgeditor
+ PRODUCT_SELECTION23=certframe
+
+# Specify SAS Installation Data File
+# Specify the full path to your SAS installation data file.
+#SAS_INSTALLATION_DATA=<full path to file>
+#SAS_INSTALLATION_DATA=/mnt/sas/nfs/SASDEPOT/SAS_Depot/sid_files/SAS94_9C59RF_70252045_LINUX_X86-64.txt
+ SAS_INSTALLATION_DATA=
+
+
+# Select Language Support
+# Select the languages for your software to support.
+#LANGUAGE_SELECTION=<comma delimited language codes>
+ LANGUAGE_SELECTION=en,u8
+
+# Select Regional Settings
+# Select the appropriate regional settings for your SAS software.
+#REGION_SETTING=<region setting code>
+ REGION_SETTING=en_US
+#UNICODE_SERVER=yes/no
+ UNICODE_SERVER=no
+
+# Select Authentication Type
+# Select the type of authentication for this system.
+#sasinstall.use.pam=yes/no
+ sasinstall.use.pam=no
+
+# Specify Remote Communication Configuration
+# The SAS Deployment Agent must be configured in order to perform configuration management operations.
+#deployagt.config.port=<port number value>
+ deployagt.config.port=5660
+#deployagt.config.security.selected=0/1/2
+ deployagt.config.security.selected=1
+
+# Specify Software Location
+# Specify the location for required software.
+#REQUIRED_SOFTWARE_PLATFORMLSF=<full path to Platform LSF 10.11>
+#REQUIRED_SOFTWARE_PLATFORMLSF=/mnt/sas/nfs/APPLSF/conf
+ REQUIRED_SOFTWARE_PLATFORMLSF=
+
+# Select Configuration Prompting Level
+# Select the level of prompting for configuration information dialogs.
+#CONFIGURATION_PROMPTS=minimum/moderate/full
+ CONFIGURATION_PROMPTS=moderate
+
+# Specify Configuration Information
+# Specify the configuration directory and the level within the configuration directory to create your SAS software configuration.
+#CONFIGURATION_DIRECTORY=<full path>
+#CONFIGURATION_DIRECTORY=/mnt/sas/nfs/SASCFG/gridctl
+ CONFIGURATION_DIRECTORY=
+#CONFIGURATION_LEVEL=<subdirectory>
+ CONFIGURATION_LEVEL=Lev1
+
+# Local Machine Name
+# Specify the local host name information.
+#os.localhost.fqdn.host.name=<text value - leave blank or remove to default on the machine where the SAS Deployment Wizard is running>
+#os.localhost.fqdn.host.name=ss-compute-1.private1.ibmssvcnv3.oraclevcn.com
+ os.localhost.fqdn.host.name=
+#os.localhost.host.name=<text value - leave blank or remove to default on the machine where the SAS Deployment Wizard is running>
+#os.localhost.host.name=ss-compute-1
+ os.localhost.host.name=
+
+# Migration Information
+# Specify migration information if performing migration for this deployment.
+#PERFORM_MIGRATION=yes/no
+ PERFORM_MIGRATION=no
+#MIGRATION_PACKAGE=<full path>
+ MIGRATION_PACKAGE=
+
+# Integrated Windows Authentication
+# Select whether to use Integrated Windows authentication for client connections.
+#client.use_iwa=yes/no
+ client.use_iwa=no
+
+# Token-based authentication
+# Select whether to use token-based authentication for client connection.
+#workspacesrv.use_tba=yes/no
+ workspacesrv.use_tba=no
+
+# SAS Metadata Server
+# Specify SAS Metadata Server connection information.
+#iomsrv.metadatasrv.host=<text value>
+#iomsrv.metadatasrv.host=metadata-0.private1.ibmssvcnv3.oraclevcn.com
+ iomsrv.metadatasrv.host=
+#iomsrv.metadatasrv.port=<port number value>
+ iomsrv.metadatasrv.port=8561
+
+# Deployment Accounts: Type of Accounts
+# Select the type of accounts chosen when configuring the Metadata Server. Your connection to the Metadata Server could be refused if you select incorrectly.
+#user.account.type.as=internal/external
+ user.account.type.as=internal
+
+# Automatic Script Execution
+# Specify your preference for automatic script execution.
+#config.sudo.setuid.is_enabled=yes/no
+ config.sudo.setuid.is_enabled=no
+
+# SAS Internal Account: Unrestricted Administrator
+# Specify the metadata password for the first Unrestricted Administrator identity. The Unrestricted Administrator has unrestricted administrative access to metadata.
+#oma.person.admin.login.passwd.internal.as=<password value>
+#oma.person.admin.login.passwd.internal.as={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+ oma.person.admin.login.passwd.internal.as=
+#oma.person.admin.login.share_passwd=yes/no
+ oma.person.admin.login.share_passwd=no
+
+# SAS Internal Account: Trusted User 
+# Specify the metadata password for the Trusted User identity. The Trusted User is a privileged service account that can act on behalf of other users on a connection to the metadata server.
+#oma.person.trustusr.login.passwd.internal.as=<password value>
+#oma.person.trustusr.login.passwd.internal.as={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+ oma.person.trustusr.login.passwd.internal.as=
+# External Account: SAS Spawned Servers Account
+# Specify credentials for the SAS Spawned Servers account, used to launch back-end stored process and pooled workspace servers.
+#oma.person.gensrvusr.login.userid=<user name value>
+ oma.person.gensrvusr.login.userid=sassrv
+#oma.person.gensrvusr.login.passwd=<password value>
+#oma.person.gensrvusr.login.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+ oma.person.gensrvusr.login.passwd=
+# Deployment Accounts: First User
+# Select whether to set up a First User identity for demonstration purposes.
+#server.runas_demouser=yes/no
+ server.runas_demouser=yes
+
+# External Account: First User
+# Specify an external user ID for the First User identity. The SAS Deployment Wizard does not validate credentials for this identity, so you do not enter a password.
+#oma.person.demo.login.userid=<user name value>
+ oma.person.demo.login.userid=sasdemo
+
+# SAS Object Spawner
+# Specify SAS Object Spawner information.
+#spawner.objectspawnr.operator.port=<port number value>
+ spawner.objectspawnr.operator.port=8581
+
+# SAS Object Spawner: Port Bank
+# Specify SAS Object Spawner port bank ports.
+#spawner.objectspawnr.portbank.port1=<port number value>
+ spawner.objectspawnr.portbank.port1=8801
+#spawner.objectspawnr.portbank.port2=<port number value>
+ spawner.objectspawnr.portbank.port2=8811
+#spawner.objectspawnr.portbank.port3=<port number value>
+ spawner.objectspawnr.portbank.port3=8821
+
+# SAS Application Server: Server Context
+# Specify the SAS application server context name.
+#oma.appserver.servercontext.name=<text value>
+ oma.appserver.servercontext.name=SASApp
+
+# SAS Workspace Server
+# Specify SAS Workspace Server information.
+#iomsrv.workspacesrv.port=<port number value>
+ iomsrv.workspacesrv.port=8591
+
+# SAS Stored Process Server
+# Specify SAS Stored Process Server information.
+#iomsrv.storprocsrv.port=<port number value>
+ iomsrv.storprocsrv.port=8601
+
+# Stored Process Server: Multibridge Connections
+# Specify multibridge connection information for the SAS Stored Process Server.
+#iomsrv.storprocsrv.loadbalanced.port1=<port number value>
+ iomsrv.storprocsrv.loadbalanced.port1=8611
+#iomsrv.storprocsrv.loadbalanced.port2=<port number value>
+ iomsrv.storprocsrv.loadbalanced.port2=8621
+#iomsrv.storprocsrv.loadbalanced.port3=<port number value>
+ iomsrv.storprocsrv.loadbalanced.port3=8631
+
+# SAS Web Infrastructure Platform Data Server
+# Specify information for SAS Web Infrastructure Platform Data Server.
+#iomsrv.webinfdsvrc.host=<text value>
+#iomsrv.webinfdsvrc.host=ss-compute-1.private1.ibmssvcnv3.oraclevcn.com
+ iomsrv.webinfdsvrc.host=
+#iomsrv.webinfdsvrc.port=<port number value>
+ iomsrv.webinfdsvrc.port=9432
+#iomsrv.webinfdsvrc.userid=<user name value>
+ iomsrv.webinfdsvrc.userid=dbmsowner
+#iomsrv.webinfdsvrc.passwd=<password value>
+#iomsrv.webinfdsvrc.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+ iomsrv.webinfdsvrc.passwd=
+
+# Grid Control Server: Job Information
+# Specify Grid Control Server job information.
+#server.grdcctlsvr.shared.dir.path=<full path>
+#server.grdcctlsvr.shared.dir.path=/mnt/sas/nfs/GRIDJOB
+ server.grdcctlsvr.shared.dir.path=
+
+# Platform Process Manager
+# Specify Platform Process Manager information.
+#server.platformpm.host=<text value>
+#server.platformpm.host=ss-compute-1.private1.ibmssvcnv3.oraclevcn.com
+ server.platformpm.host=
+#server.platformpm.port=<port number value>
+ server.platformpm.port=1966
+
+# SAS Deployment Tester Server
+# Specify SAS Deployment Tester Server connection information.
+#server.dproserver.port=<port number value>
+ server.dproserver.port=10021
+#server.dproserver.junitlocation=<full path to file (optional)>
+ server.dproserver.junitlocation=/usr/share/java/junit4.jar
+
+# Scheduling Services Cache Locator
+# Specify the Scheduling Services Cache locator information.
+#wipschedsvcs.cache.locator.port=<text value>
+ wipschedsvcs.cache.locator.port=41415
+
+# Scheduling Services DIP JobRunner
+# Toggle startup state for the Scheduling Services DIP JobRunner.
+#wipschedsvcs.dipjobrunner.autostart=yes/no
+ wipschedsvcs.dipjobrunner.autostart=no
+
+# IP Multicast Version
+# Specify the IP version to use for the IP Multicast address.
+#midtier.multicast.ip.version=ipv4/ipv6
+ midtier.multicast.ip.version=ipv4
+
+# IP Multicast
+# Specify IP Multicast information to allow status communication amongst applications.
+#midtier.multicast.address=<IP multicast address>
+ midtier.multicast.address=239.0.4.30
+#midtier.multicast.port=<port number value>
+ midtier.multicast.port=8561
+#midtier.multicast.ip.ttl=<number value>
+ midtier.multicast.ip.ttl=1
+#midtier.multicast.auth.token.is_enabled=yes/no
+ midtier.multicast.auth.token.is_enabled=no
+
+# SAS Environment Manager Agent Configuration
+# Specify the SAS Environment Manager/Agent information.
+#hyperagntc.agent.setup.camIP=<text value>
+#hyperagntc.agent.setup.camIP=ss-compute-1.private1.ibmssvcnv3.oraclevcn.com
+ hyperagntc.agent.setup.camIP=
+#hyperagntc.agent.setup.camPort=<port number value>
+ hyperagntc.agent.setup.camPort=7080
+#hyperagntc.agent.setup.camSSLPort=<port number value>
+ hyperagntc.agent.setup.camSSLPort=7443
+#hyperagntc.agent.setup.agentPort=<port number value>
+ hyperagntc.agent.setup.agentPort=2144
+
+# SAS Internal Account: SAS Environment Manager Service Account
+# Specify the metadata password for the service identity for SAS Environment Manager Service.
+#hyperagntc.admin.passwd.as=<password value>
+#hyperagntc.admin.passwd.as={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+ hyperagntc.admin.passwd.as=
+
+# Select Support Option
+# Select the support option you want to use.
+#SEND_SUPPORT_LOG_TO_SAS=yes/no
+ SEND_SUPPORT_LOG_TO_SAS=no

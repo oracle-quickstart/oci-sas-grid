@@ -1,0 +1,345 @@
+# Response file for the SAS Deployment Wizard
+# Created: May 23, 2019 8:30:25 PM
+#
+# Responses with multiple options are separated with / characters.
+
+# Select Deployment Task
+# Select the deployment task you would like to perform.
+#START_TASK=install/depot/manage
+ START_TASK=install
+
+# Specify SAS Home
+# Specify the location where SAS software will be installed on this machine.
+#SAS_HOME=<full path>
+ SAS_HOME=/sas/SASHOME
+
+# Select Deployment Type
+# Select the type of deployment you want to perform.
+#DEPLOYMENT_TYPE=planned/nonplanned/additional
+ DEPLOYMENT_TYPE=planned
+#PLANNED_INSTALL=yes/no
+ PLANNED_INSTALL=yes
+#PLANNED_CONFIGURE=yes/no
+ PLANNED_CONFIGURE=yes
+
+# Specify Deployment Plan
+# Specify a customized or standard deployment plan.
+#PLAN_TYPE=customized/standard
+ PLAN_TYPE=customized
+#CUSTOMIZED_PLAN_PATH=<full path - only if PLAN_TYPE=customized>
+ CUSTOMIZED_PLAN_PATH=/mnt/sas/nfs/SASDEPOT/SAS_Depot/plan_files/plan.xml
+#STANDARD_PLAN_NAME=<standard plan name - only if PLAN_TYPE=standard>
+ STANDARD_PLAN_NAME=
+
+# Select Deployment Step and Products to Install
+# Select the products you want to install on this machine.
+#MACHINE_SELECTION=<machine name>
+# or
+#MACHINE_SELECTION=step <#>
+ MACHINE_SELECTION=step 5
+ PRODUCT_SELECTION1=deployagent
+ PRODUCT_SELECTION2=deployagtclt
+ PRODUCT_SELECTION3=platfmltypes
+ PRODUCT_SELECTION4=mgmtconsole
+ PRODUCT_SELECTION5=wipclient
+ PRODUCT_SELECTION6=dprosmc
+ PRODUCT_SELECTION7=gridsmc
+ PRODUCT_SELECTION8=webinfdjdbc
+ PRODUCT_SELECTION9=erssvr
+ PRODUCT_SELECTION10=tcsvr
+ PRODUCT_SELECTION11=jps
+ PRODUCT_SELECTION12=webinfpltfm
+ PRODUCT_SELECTION13=themes
+ PRODUCT_SELECTION14=admappmid
+ PRODUCT_SELECTION15=platformpws
+ PRODUCT_SELECTION16=svrbakupevm
+ PRODUCT_SELECTION17=secadminevm
+ PRODUCT_SELECTION18=webdoc
+ PRODUCT_SELECTION19=biservmid
+ PRODUCT_SELECTION20=svrbakevmdoc
+ PRODUCT_SELECTION21=admappmiddoc
+ PRODUCT_SELECTION22=grdpwsevmdoc
+ PRODUCT_SELECTION23=webinfplfdoc
+ PRODUCT_SELECTION24=admapplibevm
+ PRODUCT_SELECTION25=admappsvrevm
+ PRODUCT_SELECTION26=admappusrevm
+ PRODUCT_SELECTION27=studiomid
+ PRODUCT_SELECTION28=evmgrpinfnd
+ PRODUCT_SELECTION29=hypericsvr
+ PRODUCT_SELECTION30=evmkitevp
+ PRODUCT_SELECTION31=gridpwsevm
+ PRODUCT_SELECTION32=hyperagnt
+ PRODUCT_SELECTION33=evmclient
+ PRODUCT_SELECTION34=dproclient
+ PRODUCT_SELECTION35=ttfontsvert
+ PRODUCT_SELECTION36=certframe
+
+# Specify SAS Installation Data File
+# Specify the full path to your SAS installation data file.
+#SAS_INSTALLATION_DATA=<full path to file>
+ SAS_INSTALLATION_DATA=/mnt/sas/nfs/SASDEPOT/SAS_Depot/sid_files/SAS94_9C59RF_70252045_LINUX_X86-64.txt
+
+# Select Regional Settings
+# Select the appropriate regional settings for your SAS software.
+#REGION_SETTING=<region setting code>
+ REGION_SETTING=en_US
+#UNICODE_SERVER=yes/no
+ UNICODE_SERVER=no
+
+# Specify Remote Communication Configuration
+# The SAS Deployment Agent must be configured in order to perform configuration management operations.
+#deployagt.config.port=<port number value>
+ deployagt.config.port=5660
+#deployagt.config.security.selected=0/1/2
+ deployagt.config.security.selected=1
+
+# Specify Software Location
+# Specify the location for required software.
+#REQUIRED_SOFTWARE_PLATFORMLSF=<full path to Platform LSF 10.11>
+ REQUIRED_SOFTWARE_PLATFORMLSF=/mnt/sas/nfs/APPLSF/conf
+
+# Select Configuration Prompting Level
+# Select the level of prompting for configuration information dialogs.
+#CONFIGURATION_PROMPTS=minimum/moderate/full
+ CONFIGURATION_PROMPTS=moderate
+
+# Specify Configuration Information
+# Specify the configuration directory and the level within the configuration directory to create your SAS software configuration.
+#CONFIGURATION_DIRECTORY=<full path>
+ CONFIGURATION_DIRECTORY=/sas/SASCFG
+#CONFIGURATION_LEVEL=<subdirectory>
+ CONFIGURATION_LEVEL=Lev1
+
+# Local Machine Name
+# Specify the local host name information.
+#os.localhost.fqdn.host.name=<text value - leave blank or remove to default on the machine where the SAS Deployment Wizard is running>
+ os.localhost.fqdn.host.name=mid-tier-0.private1.ibmssvcnv3.oraclevcn.com
+#os.localhost.host.name=<text value - leave blank or remove to default on the machine where the SAS Deployment Wizard is running>
+ os.localhost.host.name=mid-tier-0
+
+# Migration Information
+# Specify migration information if performing migration for this deployment.
+#PERFORM_MIGRATION=yes/no
+ PERFORM_MIGRATION=no
+#MIGRATION_PACKAGE=<full path>
+ MIGRATION_PACKAGE=
+
+# SAS Metadata Server
+# Specify SAS Metadata Server connection information.
+#iomsrv.metadatasrv.host=<text value>
+ iomsrv.metadatasrv.host=metadata-0.private1.ibmssvcnv3.oraclevcn.com
+#iomsrv.metadatasrv.port=<port number value>
+ iomsrv.metadatasrv.port=8561
+
+# Deployment Accounts: Type of Accounts
+# Select the type of accounts chosen when configuring the Metadata Server. Your connection to the Metadata Server could be refused if you select incorrectly.
+#user.account.type.as=internal/external
+ user.account.type.as=internal
+
+# SAS Internal Account: Unrestricted Administrator
+# Specify the metadata password for the first Unrestricted Administrator identity. The Unrestricted Administrator has unrestricted administrative access to metadata.
+#oma.person.admin.login.passwd.internal.as=<password value>
+ oma.person.admin.login.passwd.internal.as={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+#oma.person.admin.login.share_passwd=yes/no
+ oma.person.admin.login.share_passwd=no
+
+# SAS Internal Account: Trusted User 
+# Specify the metadata password for the Trusted User identity. The Trusted User is a privileged service account that can act on behalf of other users on a connection to the metadata server.
+#oma.person.trustusr.login.passwd.internal.as=<password value>
+ oma.person.trustusr.login.passwd.internal.as={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# Anonymous Web Access
+# Select whether to enable anonymous access to web services and applications.
+#login.webanon.is_enabled=yes/no
+ login.webanon.is_enabled=yes
+
+# SAS Internal Account: Anonymous Web User
+# Specify the metadata password for the anonymous web user identity. 
+#oma.person.webanon.login.passwd.internal=<password value>
+ oma.person.webanon.login.passwd.internal={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# E-mail Server
+# Specify e-mail server information. 
+#server.mailsrv.host=<text value>
+ server.mailsrv.host=nomail.com
+#server.mailsrv.port=<port number value>
+ server.mailsrv.port=25
+
+# E-mail Addresses
+# Specify the e-mail addresses that will be used when communicating with the system administrator.
+#server.mailsrv.email.sender.address=<text value>
+ server.mailsrv.email.sender.address=noreply@nomail.com
+#server.mailsrv.email.to.address=<text value>
+ server.mailsrv.email.to.address=norecipient@nomail.com
+#server.mailsrv.requires.authentication=yes/no
+ server.mailsrv.requires.authentication=no
+
+# SAS Web Server: Automated or Manual Configuration Option
+# Specify whether to configure SAS Web Server automatically or manually.
+#vfabrcersvrc.auto_configure=yes/no
+ vfabrcersvrc.auto_configure=yes
+
+# SAS Web Server: Configuration
+# Specify SAS Web Server configuration options.
+#vfabrcersvrc.server.http.port=<port number value>
+ vfabrcersvrc.server.http.port=7980
+#vfabrcersvrc.server.https.port=<port number value>
+ vfabrcersvrc.server.https.port=8343
+#vfabrcersvrc.server.protocol=http/https
+ vfabrcersvrc.server.protocol=http
+#vfabrcersvrc.admin.mail.account=<text value>
+ vfabrcersvrc.admin.mail.account=norecipient@nomail.com
+
+# Web Application Server: JMS Configuration
+# Specify the port for your JMS server.
+#webappsrv.jms.server.port=<port number value>
+ webappsrv.jms.server.port=61616
+#webappsrv.jms.server.jmxport=<port number value>
+ webappsrv.jms.server.jmxport=11099
+
+# Web Application Server: Cache Locator Configuration
+# Specify the port for your cache locator.
+#webappsrv.midtier.cache.locator.port=<port number value>
+ webappsrv.midtier.cache.locator.port=41415
+
+# Web Application Server: First Server Configuration
+# Specify the first web application server information.
+#webappsrv.server1.name=<text value>
+ webappsrv.server1.name=SASServer1
+
+# Web Application Server: Server Ports
+# 
+#webappsrv.server1.http.port.actual=<port number value>
+ webappsrv.server1.http.port.actual=8080
+#webappsrv.server1.jmx.port=<port number value>
+ webappsrv.server1.jmx.port=6969
+#webappsrv.server1.cluster.multiplier=1/2/3/4/5
+ webappsrv.server1.cluster.multiplier=1
+
+# Web Application Server: Second Server Configuration
+# Specify the second web application server information.
+#webappsrv.server2.name=<text value>
+ webappsrv.server2.name=SASServer2
+
+# Web Application Server: Server Ports
+# 
+#webappsrv.server2.http.port.actual=<port number value>
+ webappsrv.server2.http.port.actual=8180
+#webappsrv.server2.jmx.port=<port number value>
+ webappsrv.server2.jmx.port=7069
+#webappsrv.server2.cluster.multiplier=1/2/3/4/5
+ webappsrv.server2.cluster.multiplier=1
+
+# Web Application Server: Fourteenth Server Configuration
+# Specify the fourteenth web application server information.
+#webappsrv.server14.name=<text value>
+ webappsrv.server14.name=SASServer14
+
+# Web Application Server: Server Ports
+# 
+#webappsrv.server14.http.port.actual=<port number value>
+ webappsrv.server14.http.port.actual=9380
+#webappsrv.server14.jmx.port=<port number value>
+ webappsrv.server14.jmx.port=8269
+#webappsrv.server14.cluster.multiplier=1/2/3/4/5
+ webappsrv.server14.cluster.multiplier=1
+
+# Web Applications: Automatic Deployment
+# Specify whether to deploy the web applications automatically to the web application server.
+#webapp.auto_deploy=yes/no
+ webapp.auto_deploy=yes
+
+# Web Applications: White List of Sites Allowed to Link to This SAS Installation
+# For security reasons, websites that directly link to your SAS installation via URLs, such as reports, Single Sign-on Servers, and corporate sites, need to be explicitly included in the white list. Host names that are part of the SAS Deployment Wizard configuration are automatically included in white list processing.  Sites not included in the white list that link to your SAS Server will receive a 403 forbidden error.  
+
+You may use wildcards in your comma-separated list of allowed sites. To block selected sites from the wild card, select advanced and add the sites to the blocked sites blacklist. If you need to add exceptions, use this panel.
+#sas.web.csrf.referers.knownhosts=<text value>
+ sas.web.csrf.referers.knownhosts=
+#sas.web.csrf.referers.advanced=yes/no
+ sas.web.csrf.referers.advanced=no
+
+# SAS Web Application Themes
+# Specify information for SAS Web Application Themes
+#webapp.theme.host=<text value>
+ webapp.theme.host=mid-tier-0.private1.ibmssvcnv3.oraclevcn.com
+#webapp.theme.port=<port number value>
+ webapp.theme.port=7980
+#webapp.theme.protocol=http/https
+ webapp.theme.protocol=http
+
+# SAS Content Server: Repository Directory
+# Specify the SAS Content Server repository directory.
+#iomsrv.httpserver.repository.dir=<full path>
+ iomsrv.httpserver.repository.dir=/sas/SASCFG/Lev1/AppData/SASContentServer/Repository
+#iomsrv.httpserver.firstnode.is_clustered=yes/no
+ iomsrv.httpserver.firstnode.is_clustered=yes
+
+# SAS Web Infrastructure Platform Data Server Database Account
+# Specify the password for the SAS Web Infrastructure Platform Data Server Database Account previously created on the server hosting the SAS Web Infrastructure Platform Data Server.
+#webappsrv.dbms.admin.passwd=<password value>
+ webappsrv.dbms.admin.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# SAS Web Infrastructure Platform Database: JDBC Properties
+# Specify the connection information for the SAS Web Infrastructure Database JDBC connection.
+#webappsrv.dbms.passwd=<password value>
+ webappsrv.dbms.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# SAS Environment Manager: Administration Database Configuration
+# Specify the SAS Environment Manager Administration database information.
+#admappmid.dbms.userid=<user name value>
+ admappmid.dbms.userid=adminowner
+#admappmid.dbms.passwd=<password value>
+ admappmid.dbms.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# SAS Internal Account: SAS Environment Manager Service Account
+# Specify the metadata password for the service identity for SAS Environment Manager Service.
+#vfabrchyperc.server.admin.passwd.as=<password value>
+ vfabrchyperc.server.admin.passwd.as={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# SAS Environment Manager: Configuration
+# Specify the server information to administer the SAS Environment Manager.
+#vfabrchyperc.server.webapp.port=<port number value>
+ vfabrchyperc.server.webapp.port=7080
+#vfabrchyperc.server.webapp.secure.port=<port number value>
+ vfabrchyperc.server.webapp.secure.port=7443
+
+# SAS Environment Manager: Database Configuration
+# Specify the SAS Environment Manager database information.
+#vfabrchyperc.server.database.user=<user name value>
+ vfabrchyperc.server.database.user=EVManager
+#vfabrchyperc.server.database.password=<password value>
+ vfabrchyperc.server.database.password={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+#vfabrchyperc.server.encryption.key=<password value>
+ vfabrchyperc.server.encryption.key={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# SAS Environment Manager Agent Configuration
+# Specify the SAS Environment Manager/Agent information.
+#hyperagntc.agent.setup.agentPort=<port number value>
+ hyperagntc.agent.setup.agentPort=2144
+
+# SAS Environment Manager Enablement Kit Database Credentials
+# 
+#evmkitevp.db.userid=<user name value>
+ evmkitevp.db.userid=sasevdb
+#evmkitevp.db.passwd=<password value>
+ evmkitevp.db.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# SAS Deployment Backup and Recovery Tool: Enable Central Vault
+# Specify whether to override the default values of the shared centralized vault directory and the retention period.
+#svrbakupevm.shared.vault.dir.user_specified=yes/no
+ svrbakupevm.shared.vault.dir.user_specified=no
+
+# Platform Web Services: Platform LSF Configuration
+# Specify Platform LSF configuration properties.
+#platformpws.platformlsf.conf.dir=<full path>
+ platformpws.platformlsf.conf.dir=/mnt/sas/nfs/APPLSF/conf
+
+# Platform Web Services: Database Configuration
+# Specify Platform Web Services database configuration.
+#platformpws.dbms.passwd=<password value>
+ platformpws.dbms.passwd={sas002}E7E7881F5127FA4B563B91FD33EA4895137FF30A2028EACA356D8114
+
+# Select Support Option
+# Select the support option you want to use.
+#SEND_SUPPORT_LOG_TO_SAS=yes/no
+ SEND_SUPPORT_LOG_TO_SAS=no

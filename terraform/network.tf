@@ -2,208 +2,161 @@
 All network resources for this template
 */
 
-resource "oci_core_virtual_network" "sasgrid_vcn" {
-  cidr_block = "${var.VPC-CIDR}"
+
+data "oci_identity_availability_domains" "availability_domains" {
   compartment_id = "${var.compartment_ocid}"
-  display_name = "sasgridvcn"
-  dns_label = "sasgridvcn"
 }
 
-resource "oci_core_internet_gateway" "sasgrid_internet_gateway" {
-    compartment_id = "${var.compartment_ocid}"
-    display_name = "sasgrid_internet_gateway"
-    vcn_id = "${oci_core_virtual_network.sasgrid_vcn.id}"
-}
-
-resource "oci_core_route_table" "RouteForComplete" {
-    compartment_id = "${var.compartment_ocid}"
-    vcn_id = "${oci_core_virtual_network.sasgrid_vcn.id}"
-    display_name = "RouteTableForComplete"
-    route_rules {
-        cidr_block = "0.0.0.0/0"
-        network_entity_id = "${oci_core_internet_gateway.sasgrid_internet_gateway.id}"
-    }
+# Gets a list of Availability Domains
+data "oci_identity_availability_domains" "ADs" {
+  compartment_id = var.tenancy_ocid
 }
 
 
-resource "oci_core_nat_gateway" "sasgrid_nat_gateway" {
-  compartment_id = "${var.compartment_ocid}"
-  vcn_id         = "${oci_core_virtual_network.sasgrid_vcn.id}"
-  display_name   = "sasgrid_nat_gateway"
+resource "oci_core_virtual_network" "sas" {
+  cidr_block     = var.vpc-cidr
+  compartment_id = var.compartment_ocid
+  display_name   = "sas"
+  dns_label      = "sas"
 }
 
+resource "oci_core_internet_gateway" "internet_gateway" {
+  compartment_id = var.compartment_ocid
+  display_name   = "internet_gateway"
+  vcn_id         = oci_core_virtual_network.sas.id
+}
 
-resource "oci_core_route_table" "PrivateRouteTable" {
-  compartment_id = "${var.compartment_ocid}"
-  vcn_id         = "${oci_core_virtual_network.sasgrid_vcn.id}"
-  display_name   = "PrivateRouteTableForComplete"
-
+resource "oci_core_route_table" "pubic_route_table" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.sas.id
+  display_name   = "pubic_route_table"
   route_rules {
-    destination       = "0.0.0.0/0"
-    network_entity_id = "${oci_core_nat_gateway.sasgrid_nat_gateway.id}"
-    
+    cidr_block        = "0.0.0.0/0"
+    network_entity_id = oci_core_internet_gateway.internet_gateway.id
   }
 }
 
-resource "oci_core_security_list" "PublicSubnet" {
-    compartment_id = "${var.compartment_ocid}"
-    display_name = "Public Subnet"
-    vcn_id = "${oci_core_virtual_network.sasgrid_vcn.id}"
-    egress_security_rules = [{
-        destination = "0.0.0.0/0"
-        protocol = "6"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 22
-            "min" = 22
-        }
-        protocol = "6"
-        source = "0.0.0.0/0"
-    }]
-    ingress_security_rules = [{
-        protocol = "all"
-	source = "${var.VPC-CIDR}"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 80
-            "min" = 80
-        }
-        protocol = "6"
-        source = "0.0.0.0/0"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 443
-            "min" = 443
-        }
-        protocol = "6"
-        source = "0.0.0.0/0"
-    }]
+resource "oci_core_nat_gateway" "nat_gateway" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.sas.id
+  display_name   = "nat_gateway"
 }
 
+resource "oci_core_route_table" "private_route_table" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.sas.id
+  display_name   = "private_route_table"
 
+  route_rules {
+    destination       = "0.0.0.0/0"
+    network_entity_id = oci_core_nat_gateway.nat_gateway.id
+  }
+}
 
-resource "oci_core_security_list" "PrivateSubnet" {
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "Private"
-  vcn_id         = "${oci_core_virtual_network.sasgrid_vcn.id}"
+resource "oci_core_security_list" "public_security_list" {
+  compartment_id = var.compartment_ocid
+  display_name   = "public_security_list"
+  vcn_id         = oci_core_virtual_network.sas.id
 
-  egress_security_rules = [{
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "6"
+  }
+
+  /*
+# For PING and ICMP traffic
+    egress_security_rules = [{
+        destination = "${var.vpc-cidr}"
+        protocol = "1"
+    }]
+*/
+  ingress_security_rules {
+    tcp_options {
+      max = 22
+      min = 22
+    }
+    protocol = "6"
+    source   = "0.0.0.0/0"
+  }
+
+  ingress_security_rules {
+    tcp_options {
+      max = 3389
+      min = 3389
+    }
+    protocol = "6"
+    source   = "0.0.0.0/0"
+  }
+}
+
+resource "oci_core_security_list" "private_security_list" {
+  compartment_id = var.compartment_ocid
+  display_name   = "private_security_list"
+  vcn_id         = oci_core_virtual_network.sas.id
+
+  egress_security_rules {
     destination = "0.0.0.0/0"
     protocol    = "all"
-  }]
+  }
 
-  egress_security_rules = [{
+  egress_security_rules {
     protocol    = "all"
-    destination = "${var.VPC-CIDR}"
-  }]
-
-  ingress_security_rules = [{
-    protocol = "6"
-    source   = "${var.VPC-CIDR}"
-  }]
-
-  ingress_security_rules = [{
+    destination = var.vpc-cidr
+  }
+  ingress_security_rules {
     tcp_options {
-      "max" = 22
-      "min" = 22
+      max = 22
+      min = 22
     }
-
     protocol = "6"
-    source   = "${var.VPC-CIDR}"
-  }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 8850
-            "min" = 8850
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 80
-            "min" = 80
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 443
-            "min" = 443
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
-    # Used by PostgreSQL database.
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 8060
-            "min" = 8060
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 8061
-            "min" = 8061
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 9000
-            "min" = 8000
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
-    ingress_security_rules = [{
-        tcp_options {
-            "max" = 27009
-            "min" = 27000
-        }
-        protocol = "6"
-        source = "${var.VPC-CIDR}"
-    }]
+    source   = var.vpc-cidr
+  }
 
+  ingress_security_rules {
+    protocol = "All"
+    source   = var.vpc-cidr
+  }
 }
-
-
-
 
 ## Publicly Accessable Subnet Setup
 
 resource "oci_core_subnet" "public" {
-  count = "3"
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.AD - 1],"name")}"
-  cidr_block = "${cidrsubnet(var.VPC-CIDR, 8, count.index)}"
-  display_name = "public_${count.index}"
-  compartment_id = "${var.compartment_ocid}"
-  vcn_id = "${oci_core_virtual_network.sasgrid_vcn.id}"
-  route_table_id = "${oci_core_route_table.RouteForComplete.id}"
-  security_list_ids = ["${oci_core_security_list.PublicSubnet.id}"]
-  dhcp_options_id = "${oci_core_virtual_network.sasgrid_vcn.default_dhcp_options_id}"
-  dns_label = "public${count.index}"
+  count               = "1"
+  cidr_block          = cidrsubnet(var.vpc-cidr, 8, count.index)
+  display_name        = "public_${count.index}"
+  compartment_id      = var.compartment_ocid
+  vcn_id              = oci_core_virtual_network.sas.id
+  route_table_id      = oci_core_route_table.pubic_route_table.id
+  security_list_ids   = [oci_core_security_list.public_security_list.id]
+  dhcp_options_id     = oci_core_virtual_network.sas.default_dhcp_options_id
+  dns_label           = "public${count.index}"
 }
 
 ## Private Subnet Setup 
 
-resource "oci_core_subnet" "sasgrid_private" {
-  count                      = "3"
-  availability_domain        = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.AD - 1],"name")}"
-  cidr_block                 = "${cidrsubnet(var.VPC-CIDR, 8, count.index+3)}"
-  display_name               = "sasgrid_private_${count.index}"
-  compartment_id             = "${var.compartment_ocid}"
-  vcn_id                     = "${oci_core_virtual_network.sasgrid_vcn.id}"
-  route_table_id             = "${oci_core_route_table.PrivateRouteTable.id}"
-  security_list_ids          = ["${oci_core_security_list.PrivateSubnet.id}"]
-  dhcp_options_id            = "${oci_core_virtual_network.sasgrid_vcn.default_dhcp_options_id}"
+resource "oci_core_subnet" "private" {
+  count                      = "1"
+  cidr_block                 = cidrsubnet(var.vpc-cidr, 8, count.index + 3)
+  display_name               = "private_${count.index}"
+  compartment_id             = var.compartment_ocid
+  vcn_id                     = oci_core_virtual_network.sas.id
+  route_table_id             = oci_core_route_table.private_route_table.id
+  security_list_ids          = [oci_core_security_list.private_security_list.id]
+  dhcp_options_id            = oci_core_virtual_network.sas.default_dhcp_options_id
   prohibit_public_ip_on_vnic = "true"
-  dns_label                  = "sasgridprivate${count.index}"
+  dns_label                  = "private${count.index}"
 }
+
+resource "oci_core_subnet" "privateb" {
+  count                      = "1"
+  cidr_block                 = cidrsubnet(var.vpc-cidr, 8, count.index + 6)
+  display_name               = "privateb_${count.index}"
+  compartment_id             = var.compartment_ocid
+  vcn_id                     = oci_core_virtual_network.sas.id
+  route_table_id             = oci_core_route_table.private_route_table.id
+  security_list_ids          = [oci_core_security_list.private_security_list.id]
+  dhcp_options_id            = oci_core_virtual_network.sas.default_dhcp_options_id
+  prohibit_public_ip_on_vnic = "true"
+  dns_label                  = "privateb${count.index}"
+}
+

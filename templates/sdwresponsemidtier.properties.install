@@ -1,0 +1,109 @@
+# Response file for the SAS Deployment Wizard
+# Created: May 23, 2019 8:30:25 PM
+#
+# Responses with multiple options are separated with / characters.
+
+# Select Deployment Task
+# Select the deployment task you would like to perform.
+#START_TASK=install/depot/manage
+ START_TASK=install
+
+# Specify SAS Home
+# Specify the location where SAS software will be installed on this machine.
+#SAS_HOME=<full path>
+#SAS_HOME=/sas/SASHOME
+ SAS_HOME=
+
+# Select Deployment Type
+# Select the type of deployment you want to perform.
+#DEPLOYMENT_TYPE=planned/nonplanned/additional
+ DEPLOYMENT_TYPE=planned
+#PLANNED_INSTALL=yes/no
+ PLANNED_INSTALL=yes
+#PLANNED_CONFIGURE=yes/no
+ PLANNED_CONFIGURE=yes
+
+# Specify Deployment Plan
+# Specify a customized or standard deployment plan.
+#PLAN_TYPE=customized/standard
+ PLAN_TYPE=customized
+#CUSTOMIZED_PLAN_PATH=<full path - only if PLAN_TYPE=customized>
+#CUSTOMIZED_PLAN_PATH=/mnt/sas/nfs/SASDEPOT/SAS_Depot/plan_files/plan.xml
+ CUSTOMIZED_PLAN_PATH=
+#STANDARD_PLAN_NAME=<standard plan name - only if PLAN_TYPE=standard>
+ STANDARD_PLAN_NAME=
+
+# Products to Install
+# Select the products you want to install on this machine.
+#MACHINE_SELECTION=<machine name>
+# or
+#MACHINE_SELECTION=step <#>
+ MACHINE_SELECTION=Midtier Server
+ PRODUCT_SELECTION1=deployagent
+ PRODUCT_SELECTION2=deployagtclt
+ PRODUCT_SELECTION3=platfmltypes
+ PRODUCT_SELECTION4=mgmtconsole
+ PRODUCT_SELECTION5=wipclient
+ PRODUCT_SELECTION6=dprosmc
+ PRODUCT_SELECTION7=gridsmc
+ PRODUCT_SELECTION8=webinfdjdbc
+ PRODUCT_SELECTION9=erssvr
+ PRODUCT_SELECTION10=tcsvr
+ PRODUCT_SELECTION11=jps
+ PRODUCT_SELECTION12=webinfpltfm
+ PRODUCT_SELECTION13=themes
+ PRODUCT_SELECTION14=admappmid
+ PRODUCT_SELECTION15=platformpws
+ PRODUCT_SELECTION16=svrbakupevm
+ PRODUCT_SELECTION17=secadminevm
+ PRODUCT_SELECTION18=webdoc
+ PRODUCT_SELECTION19=biservmid
+ PRODUCT_SELECTION20=svrbakevmdoc
+ PRODUCT_SELECTION21=admappmiddoc
+ PRODUCT_SELECTION22=grdpwsevmdoc
+ PRODUCT_SELECTION23=webinfplfdoc
+ PRODUCT_SELECTION24=admapplibevm
+ PRODUCT_SELECTION25=admappsvrevm
+ PRODUCT_SELECTION26=admappusrevm
+ PRODUCT_SELECTION27=studiomid
+ PRODUCT_SELECTION28=evmgrpinfnd
+ PRODUCT_SELECTION29=hypericsvr
+ PRODUCT_SELECTION30=evmkitevp
+ PRODUCT_SELECTION31=gridpwsevm
+ PRODUCT_SELECTION32=hyperagnt
+ PRODUCT_SELECTION33=evmclient
+ PRODUCT_SELECTION34=dproclient
+ PRODUCT_SELECTION35=ttfontsvert
+ PRODUCT_SELECTION36=certframe
+
+# Specify SAS Installation Data File
+# Specify the full path to your SAS installation data file.
+#SAS_INSTALLATION_DATA=<full path to file>
+#SAS_INSTALLATION_DATA=/mnt/sas/nfs/SASDEPOT/SAS_Depot/sid_files/SAS94_9C59RF_70252045_LINUX_X86-64.txt
+ SAS_INSTALLATION_DATA=
+
+# Select Regional Settings
+# Select the appropriate regional settings for your SAS software.
+#REGION_SETTING=<region setting code>
+ REGION_SETTING=en_US
+#UNICODE_SERVER=yes/no
+ UNICODE_SERVER=no
+
+# Specify Remote Communication Configuration
+# The SAS Deployment Agent must be configured in order to perform configuration management operations.
+#deployagt.config.port=<port number value>
+ deployagt.config.port=5660
+#deployagt.config.security.selected=0/1/2
+ deployagt.config.security.selected=1
+
+# Specify Software Location
+# Specify the location for required software.
+#REQUIRED_SOFTWARE_PLATFORMLSF=<full path to Platform LSF 10.11>
+#REQUIRED_SOFTWARE_PLATFORMLSF=/mnt/sas/nfs/APPLSF/conf
+ REQUIRED_SOFTWARE_PLATFORMLSF=
+
+# Select Support Option
+# Select the support option you want to use.
+#SEND_SUPPORT_LOG_TO_SAS=yes/no
+ SEND_SUPPORT_LOG_TO_SAS=no
+

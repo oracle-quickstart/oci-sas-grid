@@ -25,3 +25,10 @@ sudo yum install firefox -y
 
 sudo yum install junit -y
 
+## TODO
+# Add ssh key to /home/sas/.ssh/authorized_key so that you can use the same key to login via mobaterm with X11 forwarding enabled.  or else the $DISPLAY will not be set for sas user and you cannot use GUI for any scripts which requires login via sas users, eg sasdm.sh
+
+mkdir -p /home/sas/.ssh/
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmunISrsi7nZJpq+coCz37E1wbQ7yy87hdzMGglYqd8mIFVa635XT59a3qd5cOFfBNyOrqS24xmbOMeEF4yUGYPa3mhLMhGDpC3PMyBb1HJuzXnrNqQyiouAiiS9NPl6M/pT2StK4fW9aKBzEpzPZ7AyC+V3bxSoAA4H81OMeVUKmxxEUzNY57wkAmVsasKoC5ZWrXvQtzSAlbRhKAt9gSLaxm4vuAOsU246WdtU3wD6cRykzZ4+7h0xO/KUGdeui8zTkxz97qXS1S9Y7KqaAAwMBnJua9JpBeZfccZADe3bbBFiZKBO4hJU2iEUuPvBKxF8BSCdgYzFGcUEB46pC/ opc@pvo-devbox" > /home/sas/.ssh/authorized_keys
+
+

@@ -14,10 +14,11 @@ echo "$nfsMountDeviceName               $nfsMountDirectory           nfs  defaul
 sudo chown -R sas:sas /mnt/sas/nfs
 
 
+# Assumes SASDepot tgz is stored on OCI Obj Storage in a compartment which is set as S3 API compartment in Tenancy details.  eg: compartment: root/internal/bd_team/common
 echo $thisHost | grep -q "ss-compute-1\|grid-1"
 if [ $? -eq 0 ]; then
   yum install https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/s/s3fs-fuse-1.85-1.el7.x86_64.rpm -y
-  echo 83bd53544431dff354452d9685eb6e810b2c8964:BX0B924rOiaR/uP6/bNtJ6onHNSXZPL86uqi5zdxcyo= > ${HOME}/.passwd-s3fs
+  echo "abc:xyz" > ${HOME}/.passwd-s3fs
   chmod 600 ${HOME}/.passwd-s3fs
   mkdir -p /mnt/oci_object_storage
   chmod 777 -R /mnt/oci_object_storage

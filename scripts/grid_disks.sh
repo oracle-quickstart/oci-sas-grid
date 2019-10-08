@@ -30,6 +30,13 @@ else
   echo "Zero block volumes, not calling iscsiadm, gridDiskCount: $gridDiskCount"
 fi
 
+# logic added to ensure all /dev/sd* devices are available, sometime it takes a few seconds
+iscsiDiskCount=`ls /dev/ | grep -ivw 'sda' | grep -ivw 'sda[1-3]' | grep -iw 'sd[b-z]' | wc -l `
+while [ $iscsiDiskCount -lt $gridDiskCount ]; do
+  sleep 5s;
+  iscsiDiskCount=`ls /dev/ | grep -ivw 'sda' | grep -ivw 'sda[1-3]' | grep -iw 'sd[b-z]' | wc -l`
+done;
+
 # For mounting BV devices
 if [ $gridDiskCount -gt 0 ] ;
 then

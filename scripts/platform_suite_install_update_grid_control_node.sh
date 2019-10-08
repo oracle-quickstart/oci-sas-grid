@@ -10,8 +10,9 @@ source /tmp/env_variables.sh
 
 # Run these to make grid control node aware of newly added grid nodes
 
-lsadmin reconfig
+echo y | lsadmin reconfig
 badmin reconfig
+
 #sudo su -l -c "lsadmin reconfig"
 #sudo su -l -c "badmin reconfig"
 

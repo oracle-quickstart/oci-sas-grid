@@ -31,7 +31,7 @@ ssh_authorized_keys = "${var.ssh_public_key}"
 user_data = "${base64encode(join("\n", list(
 "#!/usr/bin/env bash",
 "set -x",
-"sasUserPassword=${random_string.sas_user_password.result}",
+"sasUserPassword=\"${random_string.sas_user_password.result}\"",
 "nfsMountDeviceName=${local.mount_target_1_ip_address}:${local.export_path_fs1_mt1}",
 "nfsMountDirectory=/mnt${local.export_path_fs1_mt1}",
 "gridNodeCount=${var.grid["node_count"]}",

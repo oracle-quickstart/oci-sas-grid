@@ -31,6 +31,12 @@ else
   echo "Zero block volumes, not calling iscsiadm, metadataDiskCount: $metadataDiskCount"
 fi
 
+# logic added to ensure all /dev/sd* devices are available, sometime it takes a few seconds
+iscsiDiskCount=`ls /dev/ | grep -ivw 'sda' | grep -ivw 'sda[1-3]' | grep -iw 'sd[b-z]' | wc -l `
+while [ $iscsiDiskCount -lt $metadataDiskCount ]; do
+  sleep 5s;
+  iscsiDiskCount=`ls /dev/ | grep -ivw 'sda' | grep -ivw 'sda[1-3]' | grep -iw 'sd[b-z]' | wc -l`
+done;
 
 
 if [ $metadataDiskCount -gt 0 ] ;

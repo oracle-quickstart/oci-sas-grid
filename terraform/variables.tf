@@ -111,7 +111,7 @@ variable "grid" {
   type = "map"
   default = {
     shape      = "VM.Standard2.1"
-    node_count = 2
+    node_count = 3
     disk_count = 2
     disk_size  = 50
     hostname_prefix = "grid-"
@@ -158,7 +158,7 @@ variable "client_utility" {
 variable "sas_depot" {
   type = "map"
   default = {
-    root      = "/mnt/sas/nfs/SASDEPOT/SAS_Depot"
+    root      = "/mnt/sas/nfs/SASDEPOT/SAS_Depot_9C7Q4X"
     # URL to the SAS_Depot in tgz format to download from.  It will be download to SASDEPOT folder on NFS filesystem as part of the install process.
     # You can use OCI Object Storage to store the SAS_Depot tgz file and provide the pre-authenticated URL here.
     download_url = "http://host.com/SAS_Depot.tgz"
@@ -199,7 +199,7 @@ variable "nfs_mount_device_name" {
 
 # To use existing vcn, private and public subnets instead of creating new ones, provide the below 2 values for existing private and public subnets and remove/rename network.tf from current folder (mv network.tf network.tf.backup).  The private subnet should be the subnet which is used by IBM GPFS or Lustre Clients nodes (not server nodes).  The SAS install assumes the Grid nodes were already provisioned and GPFS or Lustre was already installed on them.
 variable "private_subnet_ocid_for_sas_install" {
-  default = "ocid1.subnet.oc1.iad.aaaaaaaawjyrlk3nncnyvogc33vfxxviyzyjg2accvtzvxabfnjxrrm7h6la"
+  default = ""
 }
 
 variable "public_subnet_ocid_for_sas_install" {
@@ -210,6 +210,6 @@ variable "public_subnet_ocid_for_sas_install" {
 # The first OCID in the list will be used as grid-control manager
 variable "grid_nodes_ocids" {
   type    = list(string)
-  default = ["ocid1.instance.oc1.iad.abuwcljtuhv6falvcykzhvlvqjn4eeeamz4maqjlrusbta4thxfb7kc6hcoq", "ocid1.instance.oc1.iad.abuwcljtxw26gohoqlmyml2mj7oik34odh5moecys6u7uuqy7tnq3rs4yjka"]
+  default = [""]
 }
 

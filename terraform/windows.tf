@@ -76,18 +76,18 @@ data "oci_core_instance_credentials" "InstanceCredentials" {
 ##########
 # Outputs
 ##########
-output "Username" {
+output "Windows_Remote_Desktop_Username" {
   value = ["${data.oci_core_instance_credentials.InstanceCredentials.username}"]
 }
 
-output "Password" {
+output "Windows_Remote_Desktop_Password" {
   value = ["${random_string.instance_password.result}"]
 }
 
-output "InstancePublicIP" {
+output "Windows_Remote_Desktop_Instance_PublicIP" {
   value = ["${oci_core_instance.remote_desktop_gateway.*.public_ip[0]}"]
 }
 
-output "InstancePrivateIP" {
+output "Windows_Remote_Desktop_Instance_PrivateIP" {
   value = ["${oci_core_instance.remote_desktop_gateway.*.private_ip[0]}"]
 }

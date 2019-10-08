@@ -196,7 +196,7 @@ sudo mkdir -p $nfsMountDirectory/SASHOME
 sudo mkdir -p $nfsMountDirectory/APPLSF
 sudo mkdir -p $nfsMountDirectory/SASDEPOT
 
-sasDepotRoot=${nfsMountDirectory}/SASDEPOT/SAS_Depot
+sasDepotRoot=${nfsMountDirectory}/SASDEPOT/SAS_Depot_9C7Q4X
 gridSASHome=${nfsMountDirectory}/SASHOME
 gridSASConfig=${nfsMountDirectory}/SASCFG
 gridSASAppLsf=${nfsMountDirectory}/APPLSF
@@ -239,7 +239,7 @@ echo "nfsMountDirectory=$nfsMountDirectory" >> /tmp/env_variables.sh
 echo "nfsMountDeviceName=${nfsMountDeviceName}" >> /tmp/env_variables.sh
 
 echo "gridSASHome=$gridSASHome" >> /tmp/env_variables.sh
-echo "sasUserPassword=${sasUserPassword}" >> /tmp/env_variables.sh
+echo "sasUserPassword=\"${sasUserPassword}\"" >> /tmp/env_variables.sh
 
 echo "gridSASConfig=$gridSASConfig" >> /tmp/env_variables.sh
 echo "gridSASAppLsf=${gridSASAppLsf}" >> /tmp/env_variables.sh
@@ -260,6 +260,8 @@ echo "installationData=$installationData" >> /tmp/env_variables.sh
 echo "platformLsf=${platformLsf}" >> /tmp/env_variables.sh
 
 echo "gridControlConfigDirectory=$gridControlConfigDirectory" >> /tmp/env_variables.sh
+echo "configurationDirectory=$configurationDirectory" >> /tmp/env_variables.sh
+
 echo "fqdnHostname=${fqdnHostname}" >> /tmp/env_variables.sh
 
 echo "hostname=$hostname" >> /tmp/env_variables.sh

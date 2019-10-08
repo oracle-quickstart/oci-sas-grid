@@ -11,13 +11,14 @@ count           = "${var.grid["node_count"] * var.grid["disk_count"]}"
 attachment_type = "iscsi"
 #  compartment_id  = "${var.compartment_ocid}"
 #instance_id     = "${oci_core_instance.grid.*.id[count.index % var.grid["node_count"]]}"
-instance_id     = (var.grid_nodes_ocids != "" ? var.grid_nodes_ocids[count.index % var.grid["node_count"]] : oci_core_instance.grid.*.id[count.index % var.grid["node_count"]])
-volume_id       = "${oci_core_volume.grid_exist.*.id[count.index]}"
+instance_id     = "${oci_core_instance.grid.*.id[count.index % var.grid["node_count"]]}"
+(var.grid_nodes_ocids != "" ? var.grid_nodes_ocids[0] : oci_core_subnet.privateb.*.id[0])
+volume_id       = "${oci_core_volume.grid.*.id[count.index]}"
 }
 
 
 
-#output "Grid_Private_IPs" {
-#value = "${join(",", oci_core_instance.grid.*.private_ip)}"
-#}
+output "Grid_Private_IPs" {
+value = "${join(",", oci_core_instance.grid.*.private_ip)}"
+}
 

@@ -2,7 +2,7 @@
 resource "oci_core_instance" "mid-tier" {
 display_name        = "mid-tier-${count.index}"
 compartment_id      = "${var.compartment_ocid}"
-availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")}"
+availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 3],"name")}"
 shape               = "${var.mid_tier["shape"]}"
 fault_domain        = "FAULT-DOMAIN-${(count.index%3)+1}"
 
@@ -22,7 +22,7 @@ metadata = {
 ssh_authorized_keys = "${var.ssh_public_key}"
 user_data = "${base64encode(join("\n", list(
 "#!/usr/bin/env bash",
-"sasUserPassword=${random_string.sas_user_password.result}",
+"sasUserPassword=\"${random_string.sas_user_password.result}\"",
 "midTierNodeCount=${var.mid_tier["node_count"]}",
 "midTierDiskCount=${var.mid_tier["disk_count"]}",
 "midTierNodeHostnamePrefix=${var.mid_tier["hostname_prefix"]}",
@@ -44,10 +44,10 @@ file("../scripts/x11_setup.sh"),
 count = "${var.mid_tier["node_count"]}"
 }
 
-/*
+
 resource "oci_core_volume" "mid-tier" {
 count               = "${var.mid_tier["node_count"] * var.mid_tier["disk_count"]}"
-availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")}"
+availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 3],"name")}"
 compartment_id      = "${var.compartment_ocid}"
 display_name        = "mid-tier${count.index % var.mid_tier["node_count"]}-volume${floor(count.index / var.mid_tier["node_count"])}"
 size_in_gbs         = "${var.mid_tier["disk_size"]}"
@@ -56,11 +56,10 @@ size_in_gbs         = "${var.mid_tier["disk_size"]}"
 resource "oci_core_volume_attachment" "mid-tier" {
 count           = "${var.mid_tier["node_count"] * var.mid_tier["disk_count"]}"
 attachment_type = "iscsi"
-compartment_id  = "${var.compartment_ocid}"
 instance_id     = "${oci_core_instance.mid-tier.*.id[count.index % var.mid_tier["node_count"]]}"
 volume_id       = "${oci_core_volume.mid-tier.*.id[count.index]}"
 }
-*/
+
 
 
 output "Mid_Tier_Private_IPs" {

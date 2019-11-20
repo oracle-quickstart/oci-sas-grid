@@ -1,6 +1,6 @@
 # oci-sas-grid
 
-This Terraform modules provisions all infrastructure required to deploy [SAS Grid](http://support.sas.com/software/products/gridmgr/index.html) on [Oracle Cloud Infrastructure (OCI)](https://cloud.oracle.com/en_US/cloud-infrastructure).
+This Terraform modules provisions all infrastructure required to deploy [SAS Grid](http://support.sas.com/software/products/gridmgr/index.html) on [Oracle Cloud Infrastructure (OCI)](https://cloud.oracle.com/en_US/cloud-infrastructure).  They are developed jointly by Oracle and SAS.
 
 ## Prerequisites
 First off you'll need to do some pre deploy setup.  That's all detailed [here](https://github.com/oracle-quickstart/oci-prerequisites).

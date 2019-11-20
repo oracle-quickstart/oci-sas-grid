@@ -4,14 +4,14 @@ This Terraform modules provisions all infrastructure required to deploy [SAS Gri
 
 
 ## Prerequisites
-First off you'll need to do some pre deploy setup.  That's all detailed [here](https://github.com/oracle/oci-quickstart-prerequisites).
+First off you'll need to do some pre deploy setup.  That's all detailed [here](https://github.com/oracle-quickstart/oci-prerequisites).
 
 ## Clone the Terraform template
 Now, you'll want a local copy of this repo.  You can make that with the commands:
 
-git clone https://github.com/oracle/oci-quickstart-sas
-cd oci-quickstart-sas/terraform
-ls
+    git clone https://github.com/oracle-quickstart/oci-sas
+    cd oci-sas/terraform
+    ls
 
 ## Update variables.tf file (optional)
 This is optional, but you can update the variables.tf to change compute shapes, block volumes, etc. 
@@ -19,9 +19,9 @@ This is optional, but you can update the variables.tf to change compute shapes, 
 ## Deployment and Post Deployment
 Deploy using standard Terraform commands
 
-cd terraform
-terraform init
-terraform plan
-terraform apply
+    cd terraform
+    terraform init
+    terraform plan
+    terraform apply
 
 ![](./images/Single-Node-TF-apply.PNG)

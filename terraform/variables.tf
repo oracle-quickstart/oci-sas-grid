@@ -29,12 +29,30 @@ variable "ssh_user" { default = "opc" }
 # For Ubuntu images,  set to ubuntu. 
 # variable "ssh_user" { default = "ubuntu" }
 
-variable "AD" { default = "3" }
+variable "AD" { default = "1" }
 
 variable "vpc-cidr" { default = "10.0.0.0/16" }
 
+variable "images" {
+  type = map(string)
+  default = {
+    ap-mumbai-1 = "ocid1.image.oc1.ap-mumbai-1.aaaaaaaabfqn5vmh3pg6ynpo6bqdbg7fwruu7qgbvondjic5ccr4atlj4j7q"
+    ap-seoul-1   = "ocid1.image.oc1.ap-seoul-1.aaaaaaaaxfeztdrbpn452jk2yln7imo4leuhlqicoovoqu7cxqhkr3j2zuqa"
+    ap-sydney-1    = "ocid1.image.oc1.ap-sydney-1.aaaaaaaanrubykp6xrff5xzd6gu2g6ul6ttnyoxgaeeq434urjz5j6wfq4fa"
+    ap-tokyo-1   = "ocid1.image.oc1.ap-tokyo-1.aaaaaaaakkqtoabcjigninsyalinvppokmgaza6amynam3gs2ldelpgesu6q"
+    ca-toronto-1 = "ocid1.image.oc1.ca-toronto-1.aaaaaaaab4hxrwlcs4tniwjr4wvqocmc7bcn3apnaapxabyg62m2ynwrpe2a"
+    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaawejnjwwnzapqukqudpczm4pwtpcsjhohl7qcqa5vzd3gxwmqiq3q"
+    eu-zurich-1   = "ocid1.image.oc1.eu-zurich-1.aaaaaaaa7hdfqf54qcnu3bizufapscopzdlxp54yztuxauxyraprxnqjj7ia"
+    sa-saopaulo-1 = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaa2iqobvkeowx4n2nqsgy32etohkw2srqireqqk3bhn6hv5275my6a"
+    uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaakgrjgpq3jej3tyqfwsyk76tl25zoflqfjjuuv43mgisrmhfniofq"
+    us-ashburn-1   = "ocid1.image.oc1.iad.aaaaaaaa5phjudcfeyomogjp6jjtpcl3ozgrz6s62ltrqsfunejoj7cqxqwq"
+    us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaag7vycom7jhxqxfl6rxt5pnf5wqolksl6onuqxderkqrgy4gsi3hq"
+  }
+}
+
 // See https://docs.us-phoenix-1.oraclecloud.com/images/ or https://docs.cloud.oracle.com/iaas/images/
 // Oracle-provided image "CentOS-7-2018.08.15-0"
+/*
 variable "images" {
   type = map(string)
   default = {
@@ -44,6 +62,8 @@ variable "images" {
     us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaarbacra7juwrie5idcadtgbj3llxcu7p26rj4t3xujyqwwopy2wva"
   }
 }
+*/
+
 
 # https://docs.cloud.oracle.com/iaas/images/image/09f3e226-681f-405d-bc27-070896f44973/
 # https://docs.cloud.oracle.com/iaas/images/windows-server-2016-vm/
@@ -65,13 +85,7 @@ variable "w_images" {
   }
 }
 
-variable "confluent" {
-  type = "map"
-  default = {
-    edition = "Community"
-    version = "5.1.2"
-  }
-}
+
 
 # Generate a new strong password for sas user
 resource "random_string" "sas_user_password" {
@@ -87,7 +101,7 @@ output "SAS_User_Password" {
 variable "metadata" {
   type = "map"
   default = {
-    shape      = "VM.Standard2.4"
+    shape      = "VM.Standard2.16"
     node_count = 1
     disk_count = 2
     disk_size  = 50
@@ -98,7 +112,7 @@ variable "metadata" {
 variable "mid_tier" {
   type = "map"
   default = {
-    shape      = "VM.Standard2.4"
+    shape      = "VM.Standard2.16"
     node_count = 1
     disk_count = 2
     disk_size  = 50
@@ -110,15 +124,16 @@ variable "mid_tier" {
 variable "grid" {
   type = "map"
   default = {
-    shape      = "VM.Standard2.1"
+    shape      = "VM.DenseIO2.24"
     node_count = 3
-    disk_count = 2
+    disk_count = 0
     disk_size  = 50
     hostname_prefix = "grid-"
     cluster_name = "oci_sasgrid"
   }
 }
 
+/* Used in nfs_sas.tf for target mount point */
 variable "nfs" {
   type = "map"
   default = {
@@ -131,7 +146,7 @@ variable "bastion" {
   default = {
     shape      = "VM.Standard2.2"
     node_count = 1
-    hostname_prefix = "bastion-"
+    hostname_prefix = "sas-bastion-"
   }
 }
 
@@ -150,7 +165,7 @@ variable "client_utility" {
   type = "map"
   default = {
     shape      = "VM.Standard2.1"
-    node_count = 1
+    node_count = 0
     hostname_prefix = "cu-"
   }
 }
@@ -158,17 +173,25 @@ variable "client_utility" {
 variable "sas_depot" {
   type = "map"
   default = {
-    root      = "/mnt/sas/nfs/SASDEPOT/SAS_Depot_9C7Q4X"
+# Only provide the top/root level folder name for the SAS_Depot files.  By defaut,  it is "SAS_Depot"
+    root      = "SAS_Depot_9C7Q4X"
     # URL to the SAS_Depot in tgz format to download from.  It will be download to SASDEPOT folder on NFS filesystem as part of the install process.
     # You can use OCI Object Storage to store the SAS_Depot tgz file and provide the pre-authenticated URL here.
     download_url = "http://host.com/SAS_Depot.tgz"
+    object_storage_access_key="83bd53544431dff354452d9685eb6e810b2c8964"
+    object_storage_secret_key="BX0B924rOiaR/uP6/bNtJ6onHNSXZPL86uqi5zdxcyo="
   }
 }
 
+
+/*
+  Generally, this should not require a change by the deployer.
+*/
 variable "platform_suite" {
   type = "map"
   default = {
-    lsf_top      = "/mnt/sas/nfs/APPLSF"
+#    lsf_top      = "${local.mount_target_1_ip_address}:${local.export_path_fs1_mt1}/APPLSF"
+   lsf_top      = "/mnt/sas/nfs/APPLSF"
     js_top = "/usr/share/pm"
   }
 }
@@ -213,3 +236,10 @@ variable "grid_nodes_ocids" {
   default = [""]
 }
 
+
+
+locals {
+  gpfs_private_subnet = "ocid1.subnet.oc1.iad.aaaaaaaaufhmbidkvjpabtfbue5vjpegiz6354566xgotbvbqhezyoyl2wuq"
+  public_subnet = "ocid1.subnet.oc1.iad.aaaaaaaa2jvfhodwt5yby6tw66622xtxdxnb64iawr4pd6iem4d2wel6a3bq"
+  existing_vcn = (length(local.gpfs_private_subnet) > 0 ? true : false)
+}

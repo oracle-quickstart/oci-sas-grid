@@ -21,14 +21,14 @@
 #PLANNED_INSTALL=yes/no
  PLANNED_INSTALL=yes
 #PLANNED_CONFIGURE=yes/no
- PLANNED_CONFIGURE=yes
+ PLANNED_CONFIGURE=no
 
 # Specify Deployment Plan
 # Specify a customized or standard deployment plan.
 #PLAN_TYPE=customized/standard
  PLAN_TYPE=customized
 #CUSTOMIZED_PLAN_PATH=<full path - only if PLAN_TYPE=customized>
-CUSTOMIZED_PLAN_PATH=/mnt/sas/nfs/SASDEPOT/SAS_Depot/plan_files/plan.xml
+#CUSTOMIZED_PLAN_PATH=/mnt/sas/nfs/SASDEPOT/SAS_Depot/plan_files/plan.xml
  CUSTOMIZED_PLAN_PATH=
 #STANDARD_PLAN_NAME=<standard plan name - only if PLAN_TYPE=standard>
  STANDARD_PLAN_NAME=

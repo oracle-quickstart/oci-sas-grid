@@ -2,13 +2,30 @@
 set -x
 
 source /tmp/env_variables.sh
-for file in `ls /tmp/sdwresponsemidtier*.properties*` ;
+
+# On all sas nodes
+echo "$HOSTNAME"
+
+if ! grep -q "@sas" /etc/security/limits.conf; then
+    echo "@sas             hard    nofile         20480" >> /etc/security/limits.conf
+    echo "@sas             soft    nofile         20480" >> /etc/security/limits.conf
+    echo "@sas             hard    nproc          10240" >> /etc/security/limits.conf
+    echo "@sas             soft    nproc          10240" >> /etc/security/limits.conf
+fi
+
+if ! grep -q "ulimit" /home/sas/.bash_profile; then
+    echo "ulimit -n 20480" >> /home/sas/.bash_profile
+    echo "ulimit -u 10240" >> /home/sas/.bash_profile
+fi
+
+
+for file in `ls  /tmp/sdwresponsemidtier0.properties` ;
 do
   echo $file
   sed -i  "s| SAS_HOME=.*| SAS_HOME=${midTierSASHome}|g" $file
   sed -i  "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=${planPath}|g" $file
   sed -i  "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=${installationData}|g" $file
-  sed -i  "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsf}|g" $file
+  sed -i  "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsfConf}|g" $file
   sed -i  "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=${configurationDirectory}|g" $file
   sed -i  "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=${fqdnHostname}|g" $file
   sed -i  "s| os.localhost.host.name=.*| os.localhost.host.name=${hostname}|g" $file
@@ -25,35 +42,20 @@ do
   sed -i  "s| vfabrchyperc.server.database.password=.*| vfabrchyperc.server.database.password=${sasUserPassword}|g" $file
   sed -i  "s| vfabrchyperc.server.encryption.key=.*| vfabrchyperc.server.encryption.key=${sasUserPassword}|g" $file
   sed -i  "s| evmkitevp.db.passwd=.*| evmkitevp.db.passwd=${sasUserPassword}|g" $file
-  sed -i  "s| platformpws.platformlsf.conf.dir=.*| platformpws.platformlsf.conf.dir=${gridSASAppLsf}|g" $file
+  sed -i  "s| platformpws.platformlsf.conf.dir=.*| platformpws.platformlsf.conf.dir=${platformLsfConf}|g" $file
   sed -i  "s| platformpws.dbms.passwd=.*| platformpws.dbms.passwd=${sasUserPassword}|g" $file
 done
 
-# source /tmp/env_variables.sh
-# clusterName=
-# sasDepotRoot=/SASDEPOT/SAS_Depot_9C7Q4X
-# nfsMountDirectory=
-# nfsMountDeviceName=
-# gridSASHome=/SASHOME
-# sasUserPassword='*=?<qCr3QeMIv'
-# gridSASConfig=/SASCFG
-# gridSASAppLsf=/APPLSF
-# gridSASAppLsfConfig=/APPLSF/config
-# gridSASWork=/sas/SASWORK
-# gridSASUtilloc=/sas/SASWORK/UTILLOC
-# metadataSASHome=/sas/SASHOME
-# midTierSASHome=/sas/SASHOME
-# metadataSASConfig=/sas/SASCFG
-# midTierSASConfig=/sas/SASCFG
-# planPath=/SASDEPOT/SAS_Depot_9C7Q4X/plan_files/plan.xml
-# installationData='/SASDEPOT/SAS_Depot_9C7Q4X/sid_files/SAS94_*txt'
-# platformLsf=/APPLSF/conf
-# gridControlConfigDirectory=
-# configurationDirectory=/SASCFG/mid-tier-1
-# fqdnHostname=mid-tier-1.privateb0.sas.oraclevcn.com
-# hostname=mid-tier-1
-# metadataServerFqdnHostname=metadata-1.privateb0.sas.oraclevcn.com
-# grdcctlsvrSharedDirPath=/GRIDJOB
-# midTierServerFqdnHostname=mid-tier-1.privateb0.sas.oraclevcn.com
-# gridControlServerFqdnHostname=grid-1.privateb0.sas.oraclevcn.com
-# sasDepotRoot=/SASDEPOT/SAS_Depot_9C7Q4X
+su sas -l << EOF
+cd $sasDepotRootPath
+./setup.sh -deploy -quiet -responsefile /tmp/sdwresponsemidtier0.properties
+exit $?
+EOF
+
+if [ $? -ne 0 ]; then
+  exit
+fi
+
+echo "Review Manual Configuration Instructions"
+echo "Manual steps are required to complete your configuration.  You can view these steps in /sas/SASCFG/Lev1/Documents/Instructions.html."
+

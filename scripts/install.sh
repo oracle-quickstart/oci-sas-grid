@@ -196,11 +196,10 @@ sudo mkdir -p $nfsMountDirectory/SASHOME
 sudo mkdir -p $nfsMountDirectory/APPLSF
 sudo mkdir -p $nfsMountDirectory/SASDEPOT
 
-sasDepotRoot=${nfsMountDirectory}/SASDEPOT/SAS_Depot_9C7Q4X
+sasDepotRootPath=${nfsMountDirectory}/SASDEPOT/${sasDepotRoot}
 gridSASHome=${nfsMountDirectory}/SASHOME
 gridSASConfig=${nfsMountDirectory}/SASCFG
-gridSASAppLsf=${nfsMountDirectory}/APPLSF
-gridSASAppLsfConfig=${nfsMountDirectory}/APPLSF/config
+
 gridSASWork=/sas/SASWORK
 gridSASUtilloc=/sas/SASWORK/UTILLOC
 metadataSASHome=/sas/SASHOME
@@ -208,15 +207,21 @@ midTierSASHome=/sas/SASHOME
 metadataSASConfig=/sas/SASCFG
 midTierSASConfig=/sas/SASCFG
 
-planPath=${sasDepotRoot}/plan_files/plan.xml
+# Temp workaround:
+#planPath=${sasDepotRootPath}/plan_files/plan.xml
+planPath=${sasDepotRootPath}/plan.xml
 
 # Find the full path in depot on nfs file system
-installationData=${sasDepotRoot}/sid_files/SAS94_*txt
+# moved to nfs.sh to determine the full name of SAS94*.txt
+# installationData=${sasDepotRootPath}/sid_files/SAS94_*txt
 
-platformLsf=${gridSASAppLsf}/conf
-gridControlConfigurationDirectory=${gridSASConfig}/gridctl
+platformLsf=${nfsMountDirectory}/APPLSF
+platformLsfConf=${platformLsf}/conf
+
+
+#gridControlConfigurationDirectory=${gridSASConfig}/gridctl
 # or
-configurationDirectory=${gridSASConfig}/${thisHost}
+#configurationDirectory=${gridSASConfig}/${thisHost}
 
 fqdnHostname=${thisFQDN}
 hostname=${thisHost}
@@ -229,49 +234,55 @@ midTierServerFqdnHostname=`head -n 1 /tmp/midtiernodehosts`
 
 gridControlServerFqdnHostname=`head -n 1 /tmp/gridnodehosts`
 
-configurationDirectory=${gridSASConfig}/${thisHost}
+echo $thisHost | grep -q "ss-compute-\|grid-"
+if [ $? -eq 0 ]; then
+  configurationDirectory=${gridSASConfig}/${thisHost}
+fi
+echo $thisHost | grep -q "metadata-"
+if [ $? -eq 0 ]; then
+  configurationDirectory=${metadataSASConfig}
+fi
 
+echo $thisHost | grep -q "mid-tier-"
+if [ $? -eq 0 ]; then
+  configurationDirectory=${midTierSASConfig}
+fi
 
+echo "sshPublicKey=\"${sshPublicKey}\"" >> /tmp/env_variables.sh
 echo "clusterName=$clusterName" >> /tmp/env_variables.sh
-echo "sasDepotRoot=${sasDepotRoot}" >> /tmp/env_variables.sh
-
+echo "sasDepotRootPath=${sasDepotRootPath}" >> /tmp/env_variables.sh
 echo "nfsMountDirectory=$nfsMountDirectory" >> /tmp/env_variables.sh
 echo "nfsMountDeviceName=${nfsMountDeviceName}" >> /tmp/env_variables.sh
 
-echo "gridSASHome=$gridSASHome" >> /tmp/env_variables.sh
 echo "sasUserPassword=\"${sasUserPassword}\"" >> /tmp/env_variables.sh
 
+echo "gridSASHome=$gridSASHome" >> /tmp/env_variables.sh
 echo "gridSASConfig=$gridSASConfig" >> /tmp/env_variables.sh
-echo "gridSASAppLsf=${gridSASAppLsf}" >> /tmp/env_variables.sh
 
-echo "gridSASAppLsfConfig=$gridSASAppLsfConfig" >> /tmp/env_variables.sh
+echo "platformLsf=${platformLsf}" >> /tmp/env_variables.sh
+echo "platformLsfConf=$platformLsfConf" >> /tmp/env_variables.sh
+
 echo "gridSASWork=${gridSASWork}" >> /tmp/env_variables.sh
-
 echo "gridSASUtilloc=$gridSASUtilloc" >> /tmp/env_variables.sh
-echo "metadataSASHome=${metadataSASHome}" >> /tmp/env_variables.sh
 
+echo "metadataSASHome=${metadataSASHome}" >> /tmp/env_variables.sh
 echo "midTierSASHome=$midTierSASHome" >> /tmp/env_variables.sh
 echo "metadataSASConfig=${metadataSASConfig}" >> /tmp/env_variables.sh
-
 echo "midTierSASConfig=$midTierSASConfig" >> /tmp/env_variables.sh
+
 echo "planPath=${planPath}" >> /tmp/env_variables.sh
 
-echo "installationData=$installationData" >> /tmp/env_variables.sh
-echo "platformLsf=${platformLsf}" >> /tmp/env_variables.sh
+# moved to nfs.sh to determine the full name of SAS94*.txt
+#echo "installationData=$installationData" >> /tmp/env_variables.sh
 
-echo "gridControlConfigDirectory=$gridControlConfigDirectory" >> /tmp/env_variables.sh
+echo "grdcctlsvrSharedDirPath=$grdcctlsvrSharedDirPath" >> /tmp/env_variables.sh
 echo "configurationDirectory=$configurationDirectory" >> /tmp/env_variables.sh
 
 echo "fqdnHostname=${fqdnHostname}" >> /tmp/env_variables.sh
-
 echo "hostname=$hostname" >> /tmp/env_variables.sh
 echo "metadataServerFqdnHostname=${metadataServerFqdnHostname}" >> /tmp/env_variables.sh
-
-echo "grdcctlsvrSharedDirPath=$grdcctlsvrSharedDirPath" >> /tmp/env_variables.sh
 echo "midTierServerFqdnHostname=${midTierServerFqdnHostname}" >> /tmp/env_variables.sh
-
 echo "gridControlServerFqdnHostname=$gridControlServerFqdnHostname" >> /tmp/env_variables.sh
-echo "sasDepotRoot=${sasDepotRoot}" >> /tmp/env_variables.sh
 
 # Update bash_profile
 echo ". /tmp/env_variables.sh" >> /home/sas/.bash_profile

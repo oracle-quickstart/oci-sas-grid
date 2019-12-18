@@ -180,7 +180,8 @@ resource "oci_core_instance" "my_instance" {
   display_name        = "my instance with FSS access"
   hostname_label      = "myinstance"
   shape               = "${var.instance_shape}"
-  subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
+subnet_id        = (local.existing_vcn ? local.gpfs_private_subnet : "")
+# subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
 
   metadata = {
     ssh_authorized_keys = "${var.ssh_public_key}"
@@ -227,7 +228,8 @@ resource "oci_file_storage_mount_target" "my_mount_target_1" {
   #Required
   availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
+subnet_id        = (local.existing_vcn ? local.gpfs_private_subnet : "")
+#subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
 
   #Optional
   hostname_label      = "${var.nfs["hostname_prefix"]}"
@@ -244,7 +246,8 @@ resource "oci_file_storage_mount_target" "my_mount_target_2" {
   #Required
   availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
+subnet_id        = (local.existing_vcn ? local.gpfs_private_subnet : ${oci_core_subnet.privateb.*.id[0]})
+#  subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
 
   #Optional
   display_name = "${var.mount_target_2_display_name}"
@@ -270,6 +273,7 @@ resource "oci_file_storage_snapshot" "my_snapshot" {
     "Department" = "Finance"
   }
 }
+
 
 variable "file_system_1_display_name" {
   default = "sas_nfs"

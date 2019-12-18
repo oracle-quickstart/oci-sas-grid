@@ -13,7 +13,6 @@ this_host=${this_fqdn%%.*}
 # /tmp/allnodehosts
 
 echo "$clusterName" > /tmp/clusterName
-
 echo "lsfTop=${lsfTop}" >> /tmp/env_variables.sh
 echo "jsTop=${jsTop}" >> /tmp/env_variables.sh
 

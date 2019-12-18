@@ -16,13 +16,13 @@ echo $this_host | grep -q "ss-compute-1\|grid-1"
 if [ $? -eq 0 ]; then
 
 os=`uname -a | gawk -F" " '{ print $1 }'`
-find $sasDepotRoot -name pm10*.tar | grep $os > /local/pm_install/pm10_location
+find $sasDepotRootPath -name pm10*.tar | grep $os > /local/pm_install/pm10_location
 
 for file_path in `cat /local/pm_install/pm10_location` ; do echo $file_path ; cp $file_path /local/pm_install/ ;  done ;
 cd /local/pm_install/
 tar xvf pm10*tar
 cd pm10.2_sas_pinstall/
-cp  $sasDepotRoot/sid_files/LSF* ./
+cp  $sasDepotRootPath/sid_files/LSF* ./
 cp LSF* license.dat
 
 cp install.config install.config.original

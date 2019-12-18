@@ -44,13 +44,14 @@ data "template_cloudinit_config" "cloudinit_config" {
 ###########
 resource "oci_core_instance" "remote_desktop_gateway" {
   count = "${var.remote_desktop_gateway["node_count"]}"
-  availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[0],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "${var.remote_desktop_gateway["hostname_prefix"]}${format("%01d", count.index + 1)}"
 hostname_label      = "${var.remote_desktop_gateway["hostname_prefix"]}${format("%01d", count.index + 1)}"
 
   shape            = "${var.remote_desktop_gateway["shape"]}"
-  subnet_id        = "${oci_core_subnet.public.*.id[0]}"
+ #subnet_id        = "${oci_core_subnet.public.*.id[0]}"
+subnet_id        = (local.existing_vcn ? local.public_subnet : "")
 
 
   # Refer cloud-init in https://docs.cloud.oracle.com/iaas/api/#/en/iaas/20160918/datatypes/LaunchInstanceDetails

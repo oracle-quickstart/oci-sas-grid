@@ -23,7 +23,7 @@
 #PLANNED_INSTALL=yes/no
  PLANNED_INSTALL=yes
 #PLANNED_CONFIGURE=yes/no
- PLANNED_CONFIGURE=yes
+ PLANNED_CONFIGURE=no
 
 # Specify Deployment Plan
 # Specify a customized or standard deployment plan.
@@ -39,8 +39,7 @@
 # Select the products you want to install on this machine.
 #MACHINE_SELECTION=<machine name>
 # or
-#MACHINE_SELECTION=step <#>
- MACHINE_SELECTION=SAS Application Server
+ MACHINE_SELECTION=step 2
  PRODUCT_SELECTION1=deployagent
  PRODUCT_SELECTION2=deployagtclt
  PRODUCT_SELECTION3=sasinstall

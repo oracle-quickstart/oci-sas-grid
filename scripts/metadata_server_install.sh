@@ -5,25 +5,21 @@ set -x
 echo "$HOSTNAME"
 
 if ! grep -q "@sas" /etc/security/limits.conf; then
-    echo "@sas             hard    nofile         20480" >> /etc/security/limits.conf
-    echo "@sas             soft    nofile         20480" >> /etc/security/limits.conf
-    echo "@sas             hard    nproc          20480" >> /etc/security/limits.conf
-    echo "@sas             soft    nproc          20480" >> /etc/security/limits.conf
+    echo "@sas             hard    nofile         65536" >> /etc/security/limits.conf
+    echo "@sas             soft    nofile         65536" >> /etc/security/limits.conf
+    echo "@sas             hard    nproc          65536" >> /etc/security/limits.conf
+    echo "@sas             soft    nproc          65536" >> /etc/security/limits.conf
 fi
 
-#if ! grep -q "SASFoundation" /etc/profile; then
-#    echo ". $gridSASAppLsf/conf/profile.lsf" >> /etc/profile
-#    echo 'export PATH=$PATH:$metadataSASHome/SASFoundation/9.4' >> /etc/profile
-#fi
 
 if ! grep -q "ulimit" /home/sas/.bash_profile; then
-    echo "ulimit -n 20480" >> /home/sas/.bash_profile
-    echo "ulimit -u 20480" >> /home/sas/.bash_profile
+    echo "ulimit -n 65536" >> /home/sas/.bash_profile
+    echo "ulimit -u 65536" >> /home/sas/.bash_profile
 fi
 
 
 source /tmp/env_variables.sh
-for file in `ls /tmp/sdwresponsemeta.properties*` ;
+for file in `ls /tmp/sdwresponsemeta.properties.* | grep "install$\|config$" ` ;
 do
   echo $file
   sed -i   "s| SAS_HOME=.*| SAS_HOME=${metadataSASHome}|g" $file
@@ -36,26 +32,52 @@ do
   sed -i   "s| oma.person.installer.login.passwd=.*| oma.person.installer.login.passwd=${sasUserPassword}|g" $file
   sed -i   "s| oma.person.admin.login.passwd.internal.ms=.*| oma.person.admin.login.passwd.internal.ms=${sasUserPassword}|g" $file
   sed -i   "s| oma.person.trustusr.login.passwd.internal.ms=.*| oma.person.trustusr.login.passwd.internal.ms=${sasUserPassword}|g" $file
-  sed -i   "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${hostname}|g" $file
+  sed -i   "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${midTierServerFqdnHostname}|g" $file
   sed -i   "s| hyperagntc.admin.passwd=.*| hyperagntc.admin.passwd=${sasUserPassword}|g" $file
 done
 
-exit 0
 
 su sas -l << EOF
-cd $sasDepotRoot
+cd $sasDepotRootPath
+#successIndicator="/tmp/sdwresponsemeta.install.complete"
 ./setup.sh -deploy -quiet -responsefile /tmp/sdwresponsemeta.properties.install
-exit
+#if [ $? -eq 0 ]; then
+#  touch $successIndicator
+#fi
+exit $?
 EOF
+
+if [ $? -ne 0 ]; then
+  exit
+fi
 
 su root -l << EOF
-$gridSASHome/SASFoundation/9.4/utilities/bin/setuid.sh
-exit
+#successIndicator="/tmp/sdwresponsemeta.setuid.sh.complete"
+${metadataSASHome}/SASFoundation/9.4/utilities/bin/setuid.sh
+exit $?
 EOF
 
+if [ $? -ne 0 ]; then
+  exit
+fi
+
+
+#while [ ! -f $successIndicator ]
+#do
+#  sleep 60s
+#  echo "Waiting for $successIndicator to complete..."
+#done
+
 su sas -l << EOF
-cd $sasDepotRoot
+cd $sasDepotRootPath
+#successIndicator="/tmp/sdwresponsemeta.config.complete"
 ./setup.sh -deploy -quiet -responsefile /tmp/sdwresponsemeta.properties.config
-exit
+exit $?
 EOF
+
+if [ $? -ne 0 ]; then
+  exit
+fi
+
+
 

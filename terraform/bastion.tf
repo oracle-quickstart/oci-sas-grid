@@ -1,7 +1,7 @@
 resource "oci_core_instance" "bastion" {
   display_name        = "${var.bastion["hostname_prefix"]}${count.index}"
   compartment_id      = "${var.compartment_ocid}"
-  availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[0],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")}"
   shape               = "${var.bastion["shape"]}"
   fault_domain        = "FAULT-DOMAIN-${(count.index%3)+1}"
 
@@ -11,7 +11,9 @@ resource "oci_core_instance" "bastion" {
   }
 
   create_vnic_details {
-    subnet_id        = "${oci_core_subnet.public.*.id[0]}"
+#subnet_id        = "${oci_core_subnet.public.*.id[0]}"
+    subnet_id        = (local.existing_vcn ? local.public_subnet : "")
+
     hostname_label   = "bastion-${count.index}"
   }
 
@@ -20,14 +22,8 @@ resource "oci_core_instance" "bastion" {
     ssh_authorized_keys = "${var.ssh_public_key}"
     user_data = "${base64encode(join("\n", list(
       "#!/usr/bin/env bash",
-      "version=${var.confluent["version"]}",
-      "edition=${var.confluent["edition"]}",
       "bastionNodeCount=${var.bastion["node_count"]}",
-#"schemaRegistryNodeCount=${var.schema_registry["node_count"]}",
       file("../scripts/firewall.sh")
-#file("../scripts/install.sh"),
-#file("../scripts/kafka_deploy_helper.sh"),
-#file("../scripts/bastion.sh")
     )))}"
   }
 

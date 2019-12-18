@@ -27,7 +27,7 @@ sudo yum install junit -y
 
 ## TODO
 # Add ssh key to /home/sas/.ssh/authorized_key so that you can use the same key to login via mobaterm with X11 forwarding enabled.  or else the $DISPLAY will not be set for sas user and you cannot use GUI for any scripts which requires login via sas users, eg sasdm.sh
-#mkdir -p /home/sas/.ssh/
-#echo "ssh-rsa id_rsa.pub file" > /home/sas/.ssh/authorized_keys
-
+mkdir -p /home/sas/.ssh/
+echo "$sshPublicKey" > /home/sas/.ssh/authorized_keys
+chown sas:sas -R /home/sas/.ssh
 

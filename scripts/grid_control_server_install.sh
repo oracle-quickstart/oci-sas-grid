@@ -5,13 +5,18 @@ echo "$HOSTNAME"
 
 source /tmp/env_variables.sh
 
+mkdir -p ${gridSASConfig}/${hostname}
+mkdir -p ${nfsMountDirectory}/GRIDJOB
+chown sas:sas ${gridSASConfig}/${hostname}
+chown sas:sas ${nfsMountDirectory}/GRIDJOB
+
 for file in `ls /tmp/sdwresponsegridcontrol.properties.*` ;
 do
   echo $file
   sed -i   "s| SAS_HOME=.*| SAS_HOME=${gridSASHome}|g" $file
   sed -i   "s| CUSTOMIZED_PLAN_PATH=.*| CUSTOMIZED_PLAN_PATH=${planPath}|g" $file
   sed -i   "s| SAS_INSTALLATION_DATA=.*| SAS_INSTALLATION_DATA=${installationData}|g" $file
-  sed -i   "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsf}|g" $file
+  sed -i   "s| REQUIRED_SOFTWARE_PLATFORMLSF=.*| REQUIRED_SOFTWARE_PLATFORMLSF=${platformLsfConf}|g" $file
   sed -i   "s| CONFIGURATION_DIRECTORY=.*| CONFIGURATION_DIRECTORY=${configurationDirectory}|g" $file
   sed -i   "s| os.localhost.fqdn.host.name=.*| os.localhost.fqdn.host.name=${fqdnHostname}|g" $file
   sed -i   "s| os.localhost.host.name=.*| os.localhost.host.name=${hostname}|g" $file
@@ -23,38 +28,36 @@ do
   sed -i   "s| iomsrv.webinfdsvrc.passwd=.*| iomsrv.webinfdsvrc.passwd=${sasUserPassword}|g" $file
   sed -i   "s| server.grdcctlsvr.shared.dir.path=.*| server.grdcctlsvr.shared.dir.path=${grdcctlsvrSharedDirPath}|g" $file
   sed -i   "s| server.platformpm.host=.*| server.platformpm.host=${hostname}|g" $file
-  sed -i   "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${metadataServerFqdnHostname}|g" $file
+  sed -i   "s| hyperagntc.agent.setup.camIP=.*| hyperagntc.agent.setup.camIP=${midTierServerFqdnHostname}|g" $file
   sed -i   "s| hyperagntc.admin.passwd.as=.*| hyperagntc.admin.passwd.as=${sasUserPassword}|g" $file
 done
 
-exit 0
-
 su sas -l << EOF
-cd $sasDepotRoot
+cd $sasDepotRootPath
 ./setup.sh -deploy -quiet -responsefile /tmp/sdwresponsegridcontrol.properties.install
-exit
+exit $?
 EOF
+
+if [ $? -ne 0 ]; then
+  exit
+fi
 
 su root -l << EOF
-$gridSASHome/SASFoundation/9.4/utilities/bin/setuid.sh
-exit
+${gridSASHome}/SASFoundation/9.4/utilities/bin/setuid.sh
+exit $?
 EOF
 
-# . /sas/lsf/conf/profile.lsf
-# . /mnt/sas/nfs/APPLSF/conf/profile.lsf
+if [ $? -ne 0 ]; then
+  exit
+fi
+
+
 su sas -l << EOF
-cd $sasDepotRoot
-. $gridSASAppLsf/conf/profile.lsf
+cd $sasDepotRootPath
 ./setup.sh -deploy -quiet -responsefile /tmp/sdwresponsegridcontrol.properties.config
-# ./setup.sh -deploy -quiet -responsefile /sas/quickstart/playbooks/templates/studio_config.txt
-exit
+exit $?
 EOF
 
-# Determine, if this is necessary or not
-#su root -l << EOF
-#echo "-WORK $gridSASWork" >> $gridSASHome/SASFoundation/9.4/nls/en/sasv9.cfg
-#. $gridSASAppLsf/conf/profile.lsf
-#$gridSASHome/SASFoundation/9.4/utilities/bin/setuid.sh
-#. $gridSASHome/studioconfig/sasstudio.sh start
-#exit
-#EOF
+if [ $? -ne 0 ]; then
+  exit
+fi

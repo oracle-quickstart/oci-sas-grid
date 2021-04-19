@@ -49,12 +49,12 @@ then
   echo "Creating filesystem and mounting on ..."
   mke2fs -F -t ext4 -b 4096 -E lazy_itable_init=1 -O sparse_super,dir_index,extent,has_journal,uninit_bg -m1 $device
   if [ $dcount -eq 0 ]; then
-    mountDirs="/sas/SASCFG"
+    mountDirs="${midTierSASConfigPath}"
     mkdir -p $mountDirs
   fi
   
   if [ $dcount -eq 1 ]; then
-    mountDirs="/sas/SASHOME"
+    mountDirs="${midTierSASHomePath}"
     mkdir -p $mountDirs
   fi
 
@@ -77,9 +77,10 @@ fi
 
 
 # change ownership to sas user
-chown -R sas:sas  /sas/SASCFG
-chown -R sas:sas  /sas/SASHOME
-chown -R sas:sas  /sas/*
+chown -R sas:sas  ${midTierSASConfigPath}
+chown -R sas:sas  ${midTierSASHomePath}
+chown -R sas:sas  ${midTierSASHomePath}/../*
+chown -R sas:sas  ${midTierSASConfigPath}/../*
 
 
 
@@ -106,9 +107,4 @@ chown -R sas:sas  /sas/*
     device=""
   done;
   echo "$dcount nvme found"
-
-# change ownership to sas user
-chown -R sas:sas  /sas/SASCFG
-chown -R sas:sas  /sas/SASHOME
-chown -R sas:sas  /sas/*
 

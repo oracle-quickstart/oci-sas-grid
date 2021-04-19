@@ -61,11 +61,13 @@ done;
   echo "Creating filesystem and mounting on ..."
   mke2fs -F -t ext4 -b 4096 -E lazy_itable_init=1 -O sparse_super,dir_index,extent,has_journal,uninit_bg -m1 $device
   if [ $dcount -eq 0 ]; then
+    # BVol based SASCFG and SASHOME are not required on grid nodes.
     mountDirs="/sas/SASCFG"
     mkdir -p $mountDirs
   fi
   
   if [ $dcount -eq 1 ]; then
+    # BVol based SASCFG and SASHOME are not required on grid nodes.
     mountDirs="/sas/SASHOME"
     mkdir -p $mountDirs
   fi
@@ -89,7 +91,7 @@ mount_saswork () {
 
 echo "Creating filesystem and mounting on ..."
 
-mountDirs="/sas/SASWORK"
+mountDirs="${sasWorkPath}"
 mkdir -p $mountDirs
 
 
@@ -99,7 +101,7 @@ if [ $diskCount -eq 1 ]; then
 else
   device_list="/dev/nvme[0-$((diskCount-1))]n1"
   device="/dev/md/SASWORK"
-  mountDirs="/sas/SASWORK"
+  mountDirs="${sasWorkPath}"
   raid_level="raid0"
   echo -e "RAID level of $raid_level for $diskCount disk ."
   echo "DEVICE $device_list" >  /etc/mdadm.conf
@@ -159,10 +161,10 @@ if [ $diskCount -ge 2 ]; then
 fi
 
 
-# change ownership to sas user
-chown -R sas:sas  /sas/SASCFG
-chown -R sas:sas  /sas/SASHOME
-chown -R sas:sas  /sas/*
+# BVol based SASCFG and SASHOME are not required on grid nodes.
+chown -R sas:sas  /sas/SASCFG /sas/SASHOME /sas/*
+
+chown -R sas:sas  ${sasWorkPath}/../*
 
 # Create UTILLOC as sub-directory under SASWORK as per SAS recommendation: http://support.sas.com/resources/papers/proceedings16/SAS6761-2016.pdf
-mkdir -p /sas/SASWORK/UTILLOC
+mkdir -p ${sasWorkPath}/UTILLOC

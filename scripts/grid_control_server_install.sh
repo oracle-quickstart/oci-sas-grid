@@ -5,10 +5,10 @@ echo "$HOSTNAME"
 
 source /tmp/env_variables.sh
 
-mkdir -p ${gridSASConfig}/${hostname}
-mkdir -p ${nfsMountDirectory}/GRIDJOB
-chown sas:sas ${gridSASConfig}/${hostname}
-chown sas:sas ${nfsMountDirectory}/GRIDJOB
+mkdir -p ${configurationDirectory}
+mkdir -p ${grdcctlsvrSharedDirPath}
+chown sas:sas ${configurationDirectory}
+chown sas:sas ${grdcctlsvrSharedDirPath}
 
 for file in `ls /tmp/sdwresponsegridcontrol.properties.*` ;
 do

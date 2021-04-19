@@ -3,36 +3,51 @@
 ###
 
 variable "tenancy_ocid" { }
-
 variable "user_ocid" { }
-
 variable "fingerprint" { }
-
 variable "private_key_path" { }
-
 variable "region" { default = "us-phoenix-1" }
-
 variable "compartment_ocid" { }
-
 variable "ssh_public_key" { }
-
 variable "ssh_private_key" { }
-
 variable "ssh_private_key_path" { }
 
-# For instances created using Oracle Linux and CentOS images, the user name opc is created automatically.
-# For instances created using the Ubuntu image, the user name ubuntu is created automatically.
-# The ubuntu user has sudo privileges and is configured for remote access over the SSH v2 protocol using RSA keys. The SSH public keys that you specify while creating instances are added to the /home/ubuntu/.ssh/authorized_keys file.
-# For more details: https://docs.cloud.oracle.com/iaas/Content/Compute/References/images.htm#one
-variable "ssh_user" { default = "opc" }
-
-# For Ubuntu images,  set to ubuntu. 
-# variable "ssh_user" { default = "ubuntu" }
-
-variable "AD" { default = "1" }
+variable "AD" { default = "2" }
 
 variable "vpc-cidr" { default = "10.0.0.0/16" }
 
+
+# We recommend using OCI Object Storage to upload sas_depot tgz and create Pre-authenticated request to use below.
+variable "sas_depot" {
+  type = "map"
+  default = {
+    # Only provide the top/root level folder name for the SAS_Depot tgz file.  By defaut,  it is "SAS_Depot"
+    root      = "SAS_Depot_9C7Q4X"
+    # URL to the SAS_Depot in tgz format to download from.  It will be download to SASDEPOT folder on NFS filesystem as part of the install process.
+    # You can use OCI Object Storage to store the SAS_Depot tgz file and provide the pre-authenticated URL here.
+    download_url = "http://host.com/SAS_Depot.tgz"
+    # Filename has to be plan.xml
+    download_url_plan_file = "http://host.com/plan.xml"
+    download_url_lsf_license_file = "http://host.com/LSF94_9CHHX3_70257869_LINUX_X86-64.txt"
+    download_url_sas94_license_file = "http://host.com/SAS94_9CHHX3_70257869_LINUX_X86-64.txt"
+
+  }
+}
+
+
+# CentOS7.8.2003  -  3.10.0-1127.10.1.el7.x86_64
+variable "images" {
+  type = map(string)
+    default = {
+        // See https://docs.us-phoenix-1.oraclecloud.com/images/ or https://docs.cloud.oracle.com/iaas/images/
+        // Oracle-provided image "CentOS-7-2020.06.16-0"
+        // https://docs.oracle.com/en-us/iaas/images/image/38c87774-4b0a-440a-94b2-c321af1824e4/
+	  us-ashburn-1 = "ocid1.image.oc1.iad.aaaaaaaasa5eukeizlabgietiktm7idhpegni42d4d3xz7kvi6nyao5aztlq"
+	  us-phoenix-1 = "ocid1.image.oc1.phx.aaaaaaaajw5o3qf7cha2mgov5vxnwyctmcy4eqayy7o4w7s6cqeyppqd3smq"
+    }
+}
+/*
+# CentOS-7-2019.08.20-0 (3.10.0-957.27.2.el7.x86_64)
 variable "images" {
   type = map(string)
   default = {
@@ -49,6 +64,7 @@ variable "images" {
     us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaag7vycom7jhxqxfl6rxt5pnf5wqolksl6onuqxderkqrgy4gsi3hq"
   }
 }
+*/
 
 // See https://docs.us-phoenix-1.oraclecloud.com/images/ or https://docs.cloud.oracle.com/iaas/images/
 // Oracle-provided image "CentOS-7-2018.08.15-0"
@@ -65,6 +81,7 @@ variable "images" {
 */
 
 
+# Windows images
 # https://docs.cloud.oracle.com/iaas/images/image/09f3e226-681f-405d-bc27-070896f44973/
 # https://docs.cloud.oracle.com/iaas/images/windows-server-2016-vm/
 # Windows-Server-2016-Standard-Edition-VM-Gen2-2019.07.15-0
@@ -87,16 +104,6 @@ variable "w_images" {
 
 
 
-# Generate a new strong password for sas user
-resource "random_string" "sas_user_password" {
-  length  = 16
-  special = true
-}
-
-output "SAS_User_Password" {
-  value = ["${random_string.sas_user_password.result}"]
-}
-
 
 variable "metadata" {
   type = "map"
@@ -108,6 +115,23 @@ variable "metadata" {
     hostname_prefix = "metadata-"
   }
 }
+
+variable metadata_sas_home_path { default="/sas/SASHOME" }
+variable metadata_sas_config_path { default="/sas/SASCFG" }
+variable mid_tier_sas_home_path { default="/sas/SASHOME" }
+variable mid_tier_sas_config_path { default="/sas/SASCFG" }
+variable sas_work_path { default="/sas/SASWORK" }
+variable sas_data_path { default="/gpfs/fs1" }
+
+variable nfs_mount_directory { default="/mnt/sas/nfs" }
+#
+# IMPORTANT - All the below path needs to be a sub directory under var.nfs_mount_directory.
+#
+variable grid_sas_config_path { default="/mnt/sas/nfs/SASCFG" }
+variable grid_sas_home_path { default="/mnt/sas/nfs/SASHOME" }
+variable grid_job_path { default="/mnt/sas/nfs/GRIDJOB" }
+variable lsf_home_path { default="/mnt/sas/nfs/APPLSF" }
+
 
 variable "mid_tier" {
   type = "map"
@@ -170,18 +194,7 @@ variable "client_utility" {
   }
 }
 
-variable "sas_depot" {
-  type = "map"
-  default = {
-# Only provide the top/root level folder name for the SAS_Depot files.  By defaut,  it is "SAS_Depot"
-    root      = "SAS_Depot_9C7Q4X"
-    # URL to the SAS_Depot in tgz format to download from.  It will be download to SASDEPOT folder on NFS filesystem as part of the install process.
-    # You can use OCI Object Storage to store the SAS_Depot tgz file and provide the pre-authenticated URL here.
-    download_url = "http://host.com/SAS_Depot.tgz"
-    object_storage_access_key="83bd53544431dff354452d9685eb6e810b2c8964"
-    object_storage_secret_key="BX0B924rOiaR/uP6/bNtJ6onHNSXZPL86uqi5zdxcyo="
-  }
-}
+
 
 
 /*
@@ -190,56 +203,59 @@ variable "sas_depot" {
 variable "platform_suite" {
   type = "map"
   default = {
-#    lsf_top      = "${local.mount_target_1_ip_address}:${local.export_path_fs1_mt1}/APPLSF"
-   lsf_top      = "/mnt/sas/nfs/APPLSF"
+#lsf_top      = "${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1}/APPLSF"
+#lsf_top      = "/mnt/sas/nfs/APPLSF"
     js_top = "/usr/share/pm"
   }
 }
 
 
 
+variable "use_existing_vcn" {
+  default = "false"
+}
+
+variable "vcn_id" {
+  default = ""
+}
+
+variable "public_subnet_id" {
+  default = ""
+}
+
+variable "private_subnet_id" {
+  default = ""
+}
+
+variable "privateb_subnet_id" {
+  default = ""
+}
+
+
+
+
+###
+# Configs which users should not be changing to deploy
+###
+
+# Generate a new strong password for sas user
+resource "random_string" "sas_user_password" {
+  length  = 16
+  special = true
+}
+
+output "SAS_User_Password" {
+  value = ["${random_string.sas_user_password.result}"]
+}
+
+variable "ssh_user" { default = "opc" }
+# For Ubuntu images,  set to ubuntu instead of opc
+
 variable "scripts_directory" { default="../scripts" }
 
-# "nfsMountDeviceName=${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1}",
-# Assuming there is only 1 FileSystem to mount.
-variable "nfs_mount_device_name" {
-  type = "map"
-  default = {
-    # if there is an existing NFS filesystem already created using OCI FSS service, then set fss_nfs_exist to "yes", else "no"
-    fss_nfs_exist = "no"
-    mount_target_ip_address  = ""
-    export_path = ""
-  }
-}
-
-# Uncomment this, if you already created an OCI FSS NFS filesystem in the same vcn private subnet. Also remove nfs_sas.tf, so Terraform will not create new OCI FSS NFS.
-###locals {
-  # if there is an existing NFS filesystem already created using OCI FSS service, then set fss_nfs_exist to "yes", else "no"
-###  fss_nfs_exist = "yes"
-###  mount_target_1_ip_address = "1.1.1.1"
-###  export_path_fs1_mt1 = "/mnt/sas/nfs"
-###}
-
-# To use existing vcn, private and public subnets instead of creating new ones, provide the below 2 values for existing private and public subnets and remove/rename network.tf from current folder (mv network.tf network.tf.backup).  The private subnet should be the subnet which is used by IBM GPFS or Lustre Clients nodes (not server nodes).  The SAS install assumes the Grid nodes were already provisioned and GPFS or Lustre was already installed on them.
-variable "private_subnet_ocid_for_sas_install" {
-  default = ""
-}
-
-variable "public_subnet_ocid_for_sas_install" {
-  default = ""
-}
-
-# The SAS install assumes the Grid nodes were already provisioned and GPFS or Lustre was already installed on them.
-# The first OCID in the list will be used as grid-control manager
-variable "grid_nodes_ocids" {
-  type    = list(string)
-  default = [""]
-}
-
-
-
 locals {
-  gpfs_private_subnet = "ocid1.subnet.oc1.iad.aaaaaaaaufhmbidkvjpabtfbue5vjpegiz6354566xgotbvbqhezyoyl2wuq"
-  public_subnet = "ocid1.subnet.oc1.iad.aaaaaaaa2jvfhodwt5yby6tw66622xtxdxnb64iawr4pd6iem4d2wel6a3bq"
-  existing_vcn = (length(local.gpfs_private_subnet) > 0 ? true : false)
+  public_subnet_id   = var.use_existing_vcn ? var.public_subnet_id : element(concat(oci_core_subnet.public.*.id, [""]), 0)
+  private_subnet_id  = var.use_existing_vcn ? var.private_subnet_id : element(concat(oci_core_subnet.private.*.id, [""]), 0)
+  privateb_subnet_id = var.use_existing_vcn ? var.privateb_subnet_id : element(concat(oci_core_subnet.privateb.*.id, [""]), 0)
+  client_subnet_id   = local.privateb_subnet_id
 }

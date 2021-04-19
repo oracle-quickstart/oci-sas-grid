@@ -51,12 +51,12 @@ then
   echo "Creating filesystem and mounting on ..."
   mke2fs -F -t ext4 -b 4096 -E lazy_itable_init=1 -O sparse_super,dir_index,extent,has_journal,uninit_bg -m1 $device
   if [ $dcount -eq 0 ]; then
-    mountDirs="/sas/SASCFG"
+    mountDirs="${metadataSASConfigPath}"
     mkdir -p $mountDirs
   fi
   
   if [ $dcount -eq 1 ]; then
-    mountDirs="/sas/SASHOME"
+    mountDirs="${metadataSASHomePath}"
     mkdir -p $mountDirs
   fi
  
@@ -78,9 +78,10 @@ else
 fi
 
 # change ownership to sas user
-chown -R sas:sas  /sas/SASCFG
-chown -R sas:sas  /sas/SASHOME
-chown -R sas:sas  /sas/*
+chown -R sas:sas  ${metadataSASConfigPath}
+chown -R sas:sas  ${metadataSASHomePath}
+chown -R sas:sas  ${metadataSASHomePath}/../*
+chown -R sas:sas  ${metadataSASConfigPath}/../*
 
 
   # For mounting nvme devices
@@ -89,17 +90,13 @@ chown -R sas:sas  /sas/*
   for disk in ` ls /dev/ | grep nvme | grep n1 | sort  `; do
     echo -e "\nProcessing /dev/$disk"
     device="/dev/$disk"
-
-
-  echo "Creating filesystem and mounting on ..."
-  mke2fs -F -t ext4 -b 4096 -E lazy_itable_init=1 -O sparse_super,dir_index,extent,has_journal,uninit_bg -m1 $device
-  mountDirs="/sas/$disk"
-  mkdir -p $mountDirs
-
-  mount -t ext4 -o noatime $device $mountDirs
-  UUID=$(lsblk -no UUID $device)
-  echo "UUID=$UUID   $mountDirs    ext4   defaults,noatime,_netdev,nofail,discard,barrier=0 0 1" | sudo tee -a /etc/fstab
-
+    echo "Creating filesystem and mounting on ..."
+    mke2fs -F -t ext4 -b 4096 -E lazy_itable_init=1 -O sparse_super,dir_index,extent,has_journal,uninit_bg -m1 $device
+    mountDirs="/sas/$disk"
+    mkdir -p $mountDirs
+    mount -t ext4 -o noatime $device $mountDirs
+    UUID=$(lsblk -no UUID $device)
+    echo "UUID=$UUID   $mountDirs    ext4   defaults,noatime,_netdev,nofail,discard,barrier=0 0 1" | sudo tee -a /etc/fstab
     dcount=$((dcount+1))
     index=$((index+1))
     mountDirs=""
@@ -107,7 +104,3 @@ chown -R sas:sas  /sas/*
   done;
   echo "$dcount nvme found"
 
-# change ownership to sas user
-chown -R sas:sas  /sas/SASCFG
-chown -R sas:sas  /sas/SASHOME
-chown -R sas:sas  /sas

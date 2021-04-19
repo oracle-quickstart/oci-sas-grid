@@ -57,5 +57,5 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Review Manual Configuration Instructions"
-echo "Manual steps are required to complete your configuration.  You can view these steps in /sas/SASCFG/Lev1/Documents/Instructions.html."
+echo "Manual steps are required to complete your configuration.  You can view these steps in ${configurationDirectory}/Lev1/Documents/Instructions.html."
 

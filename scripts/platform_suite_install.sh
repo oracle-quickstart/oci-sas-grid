@@ -1,3 +1,7 @@
+
+NOT USED IN AUTOMATION
+exit 1
+
 #!/bin/bash
 set -x
 echo "Running platform_suite_install.sh"

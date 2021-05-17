@@ -1,6 +1,10 @@
+/*
+OCI FSS is a managed NFS service.
+*/
 
 # Gets the list of file systems in the compartment
 data "oci_file_storage_file_systems" "sas_nfs" {
+  count = local.use_fss ? 1 : 0
   #Required
   availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
   compartment_id      = var.compartment_ocid
@@ -13,6 +17,7 @@ data "oci_file_storage_file_systems" "sas_nfs" {
 
 # Gets the list of mount targets in the compartment
 data "oci_file_storage_mount_targets" "mount_targets" {
+  count = local.use_fss ? 1 : 0
   #Required
   availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
   compartment_id      = var.compartment_ocid
@@ -26,6 +31,7 @@ data "oci_file_storage_mount_targets" "mount_targets" {
 
 # Gets the list of exports in the compartment
 data "oci_file_storage_exports" "exports" {
+  count = local.use_fss ? 1 : 0
   #Required
   compartment_id = var.compartment_ocid
 
@@ -38,9 +44,11 @@ data "oci_file_storage_exports" "exports" {
 
 # Gets a list of snapshots for a particular file system
 data "oci_file_storage_snapshots" "snapshots" {
+  count = local.use_fss ? 1 : 0
   #Required
-  file_system_id = "${oci_file_storage_file_system.sas_nfs.id}"
-
+  file_system_id = element(concat(oci_file_storage_file_system.sas_nfs.*.id, [""]), 0)
+  # "${oci_file_storage_file_system.sas_nfs.id}"
+  
   #Optional fields. Used by the service to filter the results when returning data to the client.
   #id = "${var.snapshot_id}"
   #state = "${var.snapshot_state}"
@@ -48,6 +56,7 @@ data "oci_file_storage_snapshots" "snapshots" {
 
 # Gets a list of export sets in a compartment and availability domain
 data "oci_file_storage_export_sets" "export_sets" {
+  count = local.use_fss ? 1 : 0
   #Required
   availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
   compartment_id      = var.compartment_ocid
@@ -59,19 +68,23 @@ data "oci_file_storage_export_sets" "export_sets" {
 }
 
 data "oci_core_private_ips" ip_mount_target1 {
-  subnet_id = "${oci_file_storage_mount_target.my_mount_target_1.subnet_id}"
+  count = local.use_fss ? 1 : 0
+  subnet_id = "${oci_file_storage_mount_target.my_mount_target_1[0].subnet_id}"
 
   filter {
     name   = "id"
-    values = ["${oci_file_storage_mount_target.my_mount_target_1.private_ip_ids.0}"]
+    #values = ["${oci_file_storage_mount_target.my_mount_target_1[0].private_ip_ids.0}"]
+    values = [element(concat(oci_file_storage_mount_target.my_mount_target_1.*.private_ip_ids.0, [""]), 0)]
+      
   }
 }
 
 
 resource "oci_file_storage_export" "my_export_fs1_mt1" {
+  count = local.use_fss ? 1 : 0
   #Required
-  export_set_id  = "${oci_file_storage_export_set.my_export_set_1.id}"
-  file_system_id = "${oci_file_storage_file_system.sas_nfs.id}"
+  export_set_id  = "${oci_file_storage_export_set.my_export_set_1[0].id}"
+  file_system_id = "${oci_file_storage_file_system.sas_nfs[0].id}"
   path           = "${var.export_path_fs1_mt1}"
 
   export_options {
@@ -86,8 +99,9 @@ resource "oci_file_storage_export" "my_export_fs1_mt1" {
 
 
 resource "oci_file_storage_export_set" "my_export_set_1" {
+  count = local.use_fss ? 1 : 0
   # Required
-  mount_target_id = "${oci_file_storage_mount_target.my_mount_target_1.id}"
+  mount_target_id = "${oci_file_storage_mount_target.my_mount_target_1[0].id}"
 
   # Optional
   display_name      = "${var.export_set_name_1}"
@@ -97,6 +111,7 @@ resource "oci_file_storage_export_set" "my_export_set_1" {
 
 
 resource "oci_file_storage_file_system" "sas_nfs" {
+  count = local.use_fss ? 1 : 0
   #Required
   availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
   compartment_id      = var.compartment_ocid
@@ -105,35 +120,16 @@ resource "oci_file_storage_file_system" "sas_nfs" {
   display_name = "${var.file_system_1_display_name}"
 }
 
-/*
-resource "oci_file_storage_file_system" "sas_nfs_2" {
-  #Required
-  availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
-  compartment_id      = var.compartment_ocid
-
-  #Optional
-  display_name = "${var.file_system_2_display_name}"
-}
-
-variable "file_system_2_display_name" {
-default = "sas_nfs_2"
-}
-
-variable "mount_target_2_display_name" {
-default = "sas_nfs_mount_target_2"
-}
-
-*/
-
-
-
 
 resource "oci_file_storage_mount_target" "my_mount_target_1" {
+  count = local.use_fss ? 1 : 0
   #Required
   availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
-  compartment_id      = var.compartment_ocid
-  subnet_id        = local.privateb_subnet_id
-#subnet_id           = "${oci_core_subnet.privateb.*.id[0]}"
+  compartment_id   = var.compartment_ocid
+  #subnet_id        = local.privateb_subnet_id
+  ##subnet_id        = "${oci_core_subnet.privateb.*.id[0]}"
+  subnet_id        = local.sas_private_subnet_id
+
 
   #Optional
   hostname_label      = "${var.nfs["hostname_prefix"]}"
@@ -146,8 +142,9 @@ resource "oci_file_storage_mount_target" "my_mount_target_1" {
 
 
 resource "oci_file_storage_snapshot" "my_snapshot" {
+  count = local.use_fss ? 1 : 0
   #Required
-  file_system_id = "${oci_file_storage_file_system.sas_nfs.id}"
+  file_system_id = "${oci_file_storage_file_system.sas_nfs[0].id}"
   name           = "${var.snapshot_name}"
 }
 
@@ -180,19 +177,8 @@ variable "max_byte" {
 }
 
 
-/*
-variable "export_read_write_access_source" {
-  default = "10.0.0.0/16"
-}
-
-variable "export_read_only_access_source" {
-  default = "0.0.0.0/0"
-}
-*/
-
-
-
 locals {
-  mount_target_1_ip_address = "${lookup(data.oci_core_private_ips.ip_mount_target1.private_ips[0], "ip_address")}"
+  mount_target_1_ip_address = local.use_fss ? lookup(data.oci_core_private_ips.ip_mount_target1[0].private_ips[0], "ip_address") : ""
+  # "${lookup(element(concat(data.oci_core_private_ips.ip_mount_target1.*.private_ips[0], [""]), 0), "ip_address")}"
   export_path_fs1_mt1 = "${var.export_path_fs1_mt1}"
 }

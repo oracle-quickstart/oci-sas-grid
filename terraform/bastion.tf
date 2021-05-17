@@ -8,12 +8,16 @@ resource "oci_core_instance" "bastion" {
   source_details {
     source_id   = var.images[var.region]
     source_type = "image"
+    boot_volume_size_in_gbs = var.bastion["boot_volume_size"]
+  }
+  
+  agent_config {
+    is_management_disabled = true
   }
 
   create_vnic_details {
-#subnet_id        = "${oci_core_subnet.public.*.id[0]}"
-subnet_id           = local.public_subnet_id
-
+    ##subnet_id        = "${oci_core_subnet.public.*.id[0]}"
+    subnet_id           = local.public_subnet_id
     hostname_label   = "bastion-${count.index}"
   }
 
@@ -23,6 +27,7 @@ subnet_id           = local.public_subnet_id
     user_data = base64encode(join("\n", list(
       "#!/usr/bin/env bash",
       "bastionNodeCount=${var.bastion["node_count"]}",
+      "sudo /usr/libexec/oci-growfs -y | egrep 'NOCHANGE:|CHANGED:'",
       file("../scripts/firewall.sh")
     )))
   }

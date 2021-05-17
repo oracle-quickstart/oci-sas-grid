@@ -187,7 +187,7 @@ nodeCount=$midTierNodeCount
 find_hostnames
 
 
-sasDepotRootPath=${nfsMountDirectory}/SASDEPOT/${sasDepotRoot}
+sasDepotRootPath=${mountDirectory}/SASDEPOT/${sasDepotRoot}
 
 gridSASHome=${gridSASHomePath}
 gridSASConfig=${gridSASConfigPath}
@@ -201,7 +201,7 @@ midTierSASConfig=$midTierSASConfigPath
 #sudo mkdir -p $gridSASConfig
 #sudo mkdir -p $gridSASHome
 #sudo mkdir -p $lsfHomePath
-#sudo mkdir -p $nfsMountDirectory/SASDEPOT
+#sudo mkdir -p $mountDirectory/SASDEPOT
 
 
 # Temp workaround:
@@ -249,8 +249,9 @@ echo "sasDepotDownloadUrlPlanFile=${sasDepotDownloadUrlPlanFile}" >> /tmp/env_va
 echo "sasDepotDownloadUrlLSFLicenseFile=${sasDepotDownloadUrlLSFLicenseFile}" >> /tmp/env_variables.sh
 echo "sasDepotDownloadUrlSAS94LicenseFile=${sasDepotDownloadUrlSAS94LicenseFile}" >> /tmp/env_variables.sh
 
-echo "nfsMountDirectory=$nfsMountDirectory" >> /tmp/env_variables.sh
-echo "nfsMountDeviceName=${nfsMountDeviceName}" >> /tmp/env_variables.sh
+echo "mountDirectory=$mountDirectory" >> /tmp/env_variables.sh
+echo "mountDeviceName=${mountDeviceName}" >> /tmp/env_variables.sh
+echo "sharedStorageGridNodesFsType=$sharedStorageGridNodesFsType" >> /tmp/env_variables.sh
 
 echo "sasUserPassword=\"${sasUserPassword}\"" >> /tmp/env_variables.sh
 
@@ -270,7 +271,7 @@ echo "midTierSASConfig=$midTierSASConfig" >> /tmp/env_variables.sh
 
 echo "planPath=${planPath}" >> /tmp/env_variables.sh
 
-# moved to nfs.sh to determine the full name of SAS94*.txt
+# moved to load_install_data.sh to determine the full name of SAS94*.txt
 #echo "installationData=$installationData" >> /tmp/env_variables.sh
 
 echo "grdcctlsvrSharedDirPath=$grdcctlsvrSharedDirPath" >> /tmp/env_variables.sh

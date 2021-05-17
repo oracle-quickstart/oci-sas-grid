@@ -2,8 +2,9 @@
 set -x
 echo "Running platform_suite_install_sas.sh"
 
-this_fqdn=`hostname --fqdn`
-this_host=${this_fqdn%%.*}
+thisFQDN=`hostname --fqdn`
+thisHost=${thisFQDN%%.*}
+
 
 source /tmp/env_variables.sh
 
@@ -12,7 +13,7 @@ source /tmp/env_variables.sh
 
 
 # only on grid control server, not on rest of the nodes of grid (ss-compute-2, ss-compute-3...etc)
-echo $this_host | grep -q "${gridNodeHostnamePrefix}1"
+echo $thisHost | grep -q "${gridNodeHostnamePrefix}1"
 if [ $? -eq 0 ]; then
 
 os=`uname -a | gawk -F" " '{ print $1 }'`
@@ -27,12 +28,12 @@ cp LSF*txt license.dat
 
 cp install.config install.config.original
 sed -i "s|# JS_TOP=|JS_TOP=${jsTop}|g"  install.config
-sed -i "s|# JS_HOST=|JS_HOST=${this_fqdn}|g"  install.config
+sed -i "s|# JS_HOST=|JS_HOST=${thisFQDN}|g"  install.config
 sed -i "s|# JS_ADMINS=|JS_ADMINS=sas|g"  install.config
 sed -i "s|# LSF_INSTALL=true|LSF_INSTALL=true|g"  install.config
 sed -i "s|# LSF_TOP=\"/usr/share/lsf\"|LSF_TOP=\"${lsfTop}\"|g"  install.config
 sed -i "s|# LSF_CLUSTER_NAME=\"cluster1\"|LSF_CLUSTER_NAME=\"${clusterName}\"|g"  install.config
-sed -i "s|# LSF_MASTER_LIST=\"hostm hosta hostc\"|LSF_MASTER_LIST=\"${this_fqdn}\"|g"  install.config
+sed -i "s|# LSF_MASTER_LIST=\"hostm hosta hostc\"|LSF_MASTER_LIST=\"${thisFQDN}\"|g"  install.config
 
 # make sure the pm subinstall is non-interactive (add -y -s options)
 sed -i.bak 's+\./_jsinstall.*+\./_jsinstall -y -s -f _install.config+' jsinstall

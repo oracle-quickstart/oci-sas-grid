@@ -2,9 +2,9 @@
 set -x
 echo "Running platform_suite_install_update_grid_control_node.sh"
 
+thisFQDN=`hostname --fqdn`
+thisHost=${thisFQDN%%.*}
 
-this_fqdn=`hostname --fqdn`
-this_host=${this_fqdn%%.*}
 
 source /tmp/env_variables.sh
 

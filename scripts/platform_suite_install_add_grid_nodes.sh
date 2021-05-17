@@ -2,8 +2,8 @@
 set -x 
 echo "Running platform_suite_install_add_grid_nodes.sh"
 
-this_fqdn=`hostname --fqdn`
-this_host=${this_fqdn%%.*}
+thisFQDN=`hostname --fqdn`
+thisHost=${thisFQDN%%.*}
 
 
 source /tmp/env_variables.sh
@@ -11,7 +11,7 @@ source /tmp/env_variables.sh
 
 # Add rest of the grid nodes to this file
 cat $lsfTop/conf/lsf.cluster.$clusterName
-sed -i "s|End     Host|$this_fqdn   !   !   1   (mg)\nEnd     Host|g" $lsfTop/conf/lsf.cluster.$clusterName
+sed -i "s|End     Host|$thisFQDN   !   !   1   (mg)\nEnd     Host|g" $lsfTop/conf/lsf.cluster.$clusterName
 
 
 #ss-compute-1.private1.ibmssvcnv3.oraclevcn.com   !   !   1   (mg SASApp)

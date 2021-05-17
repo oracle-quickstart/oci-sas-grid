@@ -46,11 +46,8 @@ resource "oci_core_instance" "remote_desktop_gateway" {
   availability_domain = lookup(data.oci_identity_availability_domains.availability_domains.availability_domains[var.AD - 1],"name")
   compartment_id      = var.compartment_ocid
   display_name        = "${var.remote_desktop_gateway["hostname_prefix"]}${format("%01d", count.index + 1)}"
-hostname_label      = "${var.remote_desktop_gateway["hostname_prefix"]}${format("%01d", count.index + 1)}"
 
   shape            = "${var.remote_desktop_gateway["shape"]}"
- #subnet_id        = "${oci_core_subnet.public.*.id[0]}"
-  subnet_id           = local.public_subnet_id
 
 
   # Refer cloud-init in https://docs.cloud.oracle.com/iaas/api/#/en/iaas/20160918/datatypes/LaunchInstanceDetails
@@ -60,15 +57,25 @@ hostname_label      = "${var.remote_desktop_gateway["hostname_prefix"]}${format(
   }
 
   source_details {
-    boot_volume_size_in_gbs = "${var.remote_desktop_gateway["boot_volume_size_in_gbs"]}"
     source_id   = "${var.w_images[var.region]}"
     source_type = "image"
+    boot_volume_size_in_gbs = var.remote_desktop_gateway["boot_volume_size"]
+
   }
+  
+  create_vnic_details {
+    #subnet_id        = "${oci_core_subnet.public.*.id[0]}"
+    subnet_id           = local.public_subnet_id
+    hostname_label      = "${var.remote_desktop_gateway["hostname_prefix"]}${format("%01d", count.index + 1)}"
+  }
+
+
 
 }
 
 data "oci_core_instance_credentials" "InstanceCredentials" {
-  instance_id = "${oci_core_instance.remote_desktop_gateway.*.id[0]}"
+  count = var.remote_desktop_gateway["node_count"] > 0 ? 1 : 0
+  instance_id = var.remote_desktop_gateway["node_count"] > 0 ? oci_core_instance.remote_desktop_gateway.*.id[0] : ""
 }
 
 
@@ -77,7 +84,7 @@ data "oci_core_instance_credentials" "InstanceCredentials" {
 # Outputs
 ##########
 output "Windows_Remote_Desktop_Username" {
-  value = ["${data.oci_core_instance_credentials.InstanceCredentials.username}"]
+  value = [var.remote_desktop_gateway["node_count"] > 0 ?  data.oci_core_instance_credentials.InstanceCredentials[0].username : ""]
 }
 
 output "Windows_Remote_Desktop_Password" {
@@ -85,9 +92,9 @@ output "Windows_Remote_Desktop_Password" {
 }
 
 output "Windows_Remote_Desktop_Instance_PublicIP" {
-  value = ["${oci_core_instance.remote_desktop_gateway.*.public_ip[0]}"]
+  value = [var.remote_desktop_gateway["node_count"] > 0 ? oci_core_instance.remote_desktop_gateway.*.public_ip[0] : ""]
 }
 
 output "Windows_Remote_Desktop_Instance_PrivateIP" {
-  value = ["${oci_core_instance.remote_desktop_gateway.*.private_ip[0]}"]
+  value = [var.remote_desktop_gateway["node_count"] > 0 ? oci_core_instance.remote_desktop_gateway.*.private_ip[0] : ""]
 }

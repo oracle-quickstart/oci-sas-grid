@@ -9,12 +9,16 @@ fault_domain        = "FAULT-DOMAIN-${(count.index%3)+1}"
 source_details {
 source_id   = var.images[var.region]
 source_type = "image"
+boot_volume_size_in_gbs = var.mid_tier["boot_volume_size"]
+}
+agent_config {
+  is_management_disabled = true
 }
 
 create_vnic_details {
-subnet_id           = local.privateb_subnet_id
-#subnet_id        = "${oci_core_subnet.privateb.*.id[0]}"
-#subnet_id        = "${oci_core_subnet.privateb.*.id[0]}"
+#subnet_id           = local.privateb_subnet_id
+##subnet_id        = "${oci_core_subnet.privateb.*.id[0]}"
+subnet_id        = local.sas_private_subnet_id
 hostname_label   = "mid-tier-${count.index+1}"
 assign_public_ip = "false"
 }
@@ -27,10 +31,15 @@ metadata = {
 ssh_authorized_keys = var.ssh_public_key
 user_data = "${base64encode(join("\n", list(
     "#!/usr/bin/env bash",
+)))}"
+}
+
+/*
     "sshPublicKey=\"${var.ssh_public_key}\"",
     "sasUserPassword=\"${random_string.sas_user_password.result}\"",
-    "nfsMountDeviceName=${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1}",
-    "nfsMountDirectory=${var.nfs_mount_directory}",
+    "mountDeviceName=${local.mount_device_name}",
+    "mountDirectory=${var.mount_directory}",
+    "sharedStorageGridNodesFsType=${var.shared_storage_grid_nodes_fs_type}",
     "midTierNodeCount=${var.mid_tier["node_count"]}",
     "midTierDiskCount=${var.mid_tier["disk_count"]}",
     "midTierNodeHostnamePrefix=${var.mid_tier["hostname_prefix"]}",
@@ -58,14 +67,14 @@ user_data = "${base64encode(join("\n", list(
     "gridSASHomePath=${var.grid_sas_home_path}",
     "gridJobPath=${var.grid_job_path}",
     "lsfHomePath=${var.lsf_home_path}",
+    "sudo /usr/libexec/oci-growfs -y | egrep 'NOCHANGE:|CHANGED:'",
     file("../scripts/firewall.sh"),
     file("../scripts/install.sh"),
     file("../scripts/mid_tier_disks.sh"),
     file("../scripts/x11_setup.sh"),
-    file("../scripts/nfs.sh"),
+    file("../scripts/load_install_data.sh"),
     "touch /tmp/cloud_init.complete"
-)))}"
-}
+*/
 
 count = "${var.mid_tier["node_count"]}"
 }

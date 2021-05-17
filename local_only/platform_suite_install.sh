@@ -15,7 +15,7 @@ echo "Running platform_suite_install.sh"
 
 
 # only on grid control server, not on rest of the nodes of grid (ss-compute-2, ss-compute-3...etc)
-echo $this_host | grep -q "ss-compute-1"
+echo $thisHost | grep -q "ss-compute-1"
 if [ $? -eq 0 ]; then
 
 
@@ -30,12 +30,12 @@ if [ $? -eq 0 ]; then
   #cp LSF* license.dat
 
   sed -i "s|# JS_TOP=|JS_TOP=/usr/share/pm|g"  install.config
-  sed -i "s|# JS_HOST=|JS_HOST=${this_fqdn}|g"  install.config
+  sed -i "s|# JS_HOST=|JS_HOST=${thisFQDN}|g"  install.config
   sed -i "s|# JS_ADMINS=|JS_ADMINS=sas|g"  install.config
   sed -i "s|# LSF_INSTALL=true|LSF_INSTALL=true|g"  install.config
   sed -i "s|# LSF_TOP=\"/usr/share/lsf\"|LSF_TOP=\"/mnt/sas/nfs/APPLSF\"|g"  install.config
   sed -i "s|# LSF_CLUSTER_NAME=\"cluster1\"|LSF_CLUSTER_NAME=\"${cluster_name}\"|g"  install.config
-  sed -i "s|# LSF_MASTER_LIST=\"hostm hosta hostc\"|LSF_MASTER_LIST=\"${this_fqdn}\"|g"  install.config
+  sed -i "s|# LSF_MASTER_LIST=\"hostm hosta hostc\"|LSF_MASTER_LIST=\"${thisFQDN}\"|g"  install.config
 
   # Platform Web Services Process Manager
   #echo ". /mnt/sas/nfs/APPLSF/conf/profile.lsf" >> /home/sas/.bash_profile 

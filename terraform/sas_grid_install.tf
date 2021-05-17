@@ -1,7 +1,9 @@
 
 resource "null_resource" "metadata_server_install" {
-  depends_on = [ oci_core_instance.metadata, null_resource.wait_for_grid_cloud_init_to_complete, null_resource.wait_for_metadata_cloud_init_to_complete, null_resource.wait_for_mid_tier_cloud_init_to_complete, null_resource.platform_suite_install_update_grid_control_node]
-  count = "${var.metadata["node_count"]}"
+  depends_on = [ oci_core_instance.metadata, null_resource.wait_for_grid_cloud_init_to_complete, null_resource.wait_for_metadata_cloud_init_to_complete, null_resource.wait_for_mid_tier_cloud_init_to_complete, null_resource.load_install_data, null_resource.platform_suite_install_update_grid_control_node]
+  #count = "${var.metadata["node_count"]}"
+  count = local.phase2_install_configure_sas ?  var.metadata["node_count"] : 0
+
   triggers = {
     instance_ids = "oci_core_instance.metadata.*.id"
   }
@@ -63,9 +65,11 @@ resource "null_resource" "metadata_server_install" {
 
 # For first Grid nodes (node 1). Grid Control Server.
 resource "null_resource" "grid_control_server_install" {
-  depends_on = [ oci_core_instance.grid , null_resource.wait_for_grid_cloud_init_to_complete, null_resource.wait_for_metadata_cloud_init_to_complete, null_resource.wait_for_mid_tier_cloud_init_to_complete, null_resource.platform_suite_install_update_grid_control_node,
+  depends_on = [ oci_core_instance.grid , null_resource.wait_for_grid_cloud_init_to_complete, null_resource.wait_for_metadata_cloud_init_to_complete, null_resource.wait_for_mid_tier_cloud_init_to_complete, null_resource.load_install_data, null_resource.platform_suite_install_update_grid_control_node,
       null_resource.metadata_server_install]
-  count = "1"
+  #count = "1"
+  count = local.phase2_install_configure_sas ?  1 : 0
+
   triggers = {
     instance_ids = "oci_core_instance.grid.*.id[0]"
   }
@@ -125,7 +129,9 @@ resource "null_resource" "grid_control_server_install" {
 # For Grid nodes2 -subsequent_grid_nodes_install
 resource "null_resource" "grid_nodes_2_install" {
   depends_on = [ oci_core_instance.grid, null_resource.grid_control_server_install]
-  count = 1
+  #count = 1
+  count = local.phase2_install_configure_sas ?  1 : 0
+
   triggers = {
     instance_ids = "oci_core_instance.grid.*.id"
   }
@@ -187,8 +193,9 @@ resource "null_resource" "grid_nodes_2_install" {
 # For Grid nodes 3
 resource "null_resource" "grid_nodes_3_install" {
   depends_on = [ oci_core_instance.grid, null_resource.grid_control_server_install, null_resource.grid_nodes_2_install ]
-# count = "${var.grid["node_count"] - 1}"
-  count = "1"
+  #count = "1"
+  count = local.phase2_install_configure_sas ?  ( var.grid["node_count"] >= 3 ? 1 : 0 ) : 0
+
   triggers = {
     instance_ids = "oci_core_instance.grid.*.id"
   }
@@ -249,13 +256,15 @@ resource "null_resource" "grid_nodes_3_install" {
 
 
 resource "null_resource" "mid_tier_server_install" {
-  depends_on = [ oci_core_instance.mid-tier, null_resource.metadata_server_install,
+  depends_on = [ oci_core_instance.mid-tier, null_resource.metadata_server_install, null_resource.grid_control_server_install,
 null_resource.grid_nodes_2_install,
 null_resource.grid_nodes_3_install]
 
 #     null_resource.subsequent_grid_nodes_install,
 
-  count = "${var.mid_tier["node_count"]}"
+  #count = "${var.mid_tier["node_count"]}"
+  count = local.phase2_install_configure_sas ?  var.mid_tier["node_count"] : 0
+
   triggers = {
     instance_ids = "oci_core_instance.mid-tier.*.id"
   }

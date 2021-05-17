@@ -9,4 +9,4 @@ source grid_env_variables.sh
 
 #source grid_disks.sh
 
-source nfs.sh 
+source load_install_data.sh

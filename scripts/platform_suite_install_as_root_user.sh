@@ -2,14 +2,15 @@
 set -x
 echo "Running platform_suite_install_root.sh"
 
-this_fqdn=`hostname --fqdn`
-this_host=${this_fqdn%%.*}
+thisFQDN=`hostname --fqdn`
+thisHost=${thisFQDN%%.*}
+
 
 source /tmp/env_variables.sh
 
 
 # only on grid control server, not on rest of the nodes of grid (ss-compute-2, ss-compute-3...etc)
-echo $this_host | grep -q "${gridNodeHostnamePrefix}1"
+echo $thisHost | grep -q "${gridNodeHostnamePrefix}1"
 if [ $? -eq 0 ]; then
   cd /local/pm_install/pm10.2_sas_pinstall
   echo 1 | ./jsinstall -f ./install.config &> install.log

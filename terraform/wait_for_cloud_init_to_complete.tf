@@ -1,5 +1,5 @@
 resource "null_resource" "wait_for_grid_cloud_init_to_complete" {
-  depends_on = [ oci_core_instance.grid ]
+  depends_on = [ oci_core_instance.grid , null_resource.configure_grid_node ]
   count = "${var.grid["node_count"]}"
   triggers = {
     instance_ids = "oci_core_instance.grid.*.id"
@@ -42,7 +42,7 @@ resource "null_resource" "wait_for_grid_cloud_init_to_complete" {
 }
 
 resource "null_resource" "wait_for_metadata_cloud_init_to_complete" {
-  depends_on = [ oci_core_instance.metadata ]
+  depends_on = [ oci_core_instance.metadata , null_resource.configure_metadata_node ]
   count = "${var.metadata["node_count"]}"
   triggers = {
     instance_ids = "oci_core_instance.metadata.*.id"
@@ -86,7 +86,7 @@ resource "null_resource" "wait_for_metadata_cloud_init_to_complete" {
 
 
 resource "null_resource" "wait_for_mid_tier_cloud_init_to_complete" {
-  depends_on = [ oci_core_instance.mid-tier ]
+  depends_on = [ oci_core_instance.mid-tier , null_resource.configure_mid_tier_node ]
   count = "${var.mid_tier["node_count"]}"
   triggers = {
     instance_ids = "oci_core_instance.mid-tier.*.id"

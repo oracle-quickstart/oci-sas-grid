@@ -2,19 +2,30 @@
 ## Variables.tf for Terraform
 ###
 
-variable "tenancy_ocid" { }
-variable "user_ocid" { }
-variable "fingerprint" { }
-variable "private_key_path" { }
-variable "region" { default = "us-phoenix-1" }
-variable "compartment_ocid" { }
-variable "ssh_public_key" { }
-variable "ssh_private_key" { }
-variable "ssh_private_key_path" { }
-
-variable "AD" { default = "2" }
+# 1 , 2 , 3
+variable "AD" { default = "3" }
 
 variable "vpc-cidr" { default = "10.0.0.0/16" }
+
+variable "use_existing_vcn" {
+  default = "false"
+}
+
+variable "vcn_id" {
+  default = ""
+}
+
+variable "public_subnet_id" {
+  default = ""
+}
+
+variable "private_subnet_id" {
+  default = ""
+}
+# if you are using dedicated nodes for file server and they are Bare metal with 2 physical NICs, then 2 subnets are required and all grid nodes will be provisioned in below subnet.
+variable "privateb_subnet_id" {
+  default = ""
+}
 
 
 # We recommend using OCI Object Storage to upload sas_depot tgz and create Pre-authenticated request to use below.
@@ -30,7 +41,6 @@ variable "sas_depot" {
     download_url_plan_file = "http://host.com/plan.xml"
     download_url_lsf_license_file = "http://host.com/LSF94_9CHHX3_70257869_LINUX_X86-64.txt"
     download_url_sas94_license_file = "http://host.com/SAS94_9CHHX3_70257869_LINUX_X86-64.txt"
-
   }
 }
 
@@ -46,39 +56,11 @@ variable "images" {
 	  us-phoenix-1 = "ocid1.image.oc1.phx.aaaaaaaajw5o3qf7cha2mgov5vxnwyctmcy4eqayy7o4w7s6cqeyppqd3smq"
     }
 }
-/*
-# CentOS-7-2019.08.20-0 (3.10.0-957.27.2.el7.x86_64)
-variable "images" {
-  type = map(string)
-  default = {
-    ap-mumbai-1 = "ocid1.image.oc1.ap-mumbai-1.aaaaaaaabfqn5vmh3pg6ynpo6bqdbg7fwruu7qgbvondjic5ccr4atlj4j7q"
-    ap-seoul-1   = "ocid1.image.oc1.ap-seoul-1.aaaaaaaaxfeztdrbpn452jk2yln7imo4leuhlqicoovoqu7cxqhkr3j2zuqa"
-    ap-sydney-1    = "ocid1.image.oc1.ap-sydney-1.aaaaaaaanrubykp6xrff5xzd6gu2g6ul6ttnyoxgaeeq434urjz5j6wfq4fa"
-    ap-tokyo-1   = "ocid1.image.oc1.ap-tokyo-1.aaaaaaaakkqtoabcjigninsyalinvppokmgaza6amynam3gs2ldelpgesu6q"
-    ca-toronto-1 = "ocid1.image.oc1.ca-toronto-1.aaaaaaaab4hxrwlcs4tniwjr4wvqocmc7bcn3apnaapxabyg62m2ynwrpe2a"
-    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaawejnjwwnzapqukqudpczm4pwtpcsjhohl7qcqa5vzd3gxwmqiq3q"
-    eu-zurich-1   = "ocid1.image.oc1.eu-zurich-1.aaaaaaaa7hdfqf54qcnu3bizufapscopzdlxp54yztuxauxyraprxnqjj7ia"
-    sa-saopaulo-1 = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaa2iqobvkeowx4n2nqsgy32etohkw2srqireqqk3bhn6hv5275my6a"
-    uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaakgrjgpq3jej3tyqfwsyk76tl25zoflqfjjuuv43mgisrmhfniofq"
-    us-ashburn-1   = "ocid1.image.oc1.iad.aaaaaaaa5phjudcfeyomogjp6jjtpcl3ozgrz6s62ltrqsfunejoj7cqxqwq"
-    us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaag7vycom7jhxqxfl6rxt5pnf5wqolksl6onuqxderkqrgy4gsi3hq"
-  }
-}
-*/
+# or
+# Custom image:  OL-RHCK image with Spectrum Scale binaries pre-installed
+# or
+# Custom image:  OL-RHCK image
 
-// See https://docs.us-phoenix-1.oraclecloud.com/images/ or https://docs.cloud.oracle.com/iaas/images/
-// Oracle-provided image "CentOS-7-2018.08.15-0"
-/*
-variable "images" {
-  type = map(string)
-  default = {
-    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaatz6zixwltzswnmzi2qxdjcab6nw47xne4tco34kn6hltzdppmada"
-    us-ashburn-1   = "ocid1.image.oc1.iad.aaaaaaaah6ui3hcaq7d43esyrfmyqb3mwuzn4uoxjlbbdwoiicdmntlvwpda"
-    uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaai3czrt22cbu5uytpci55rcy4mpi4j7wm46iy5wdieqkestxve4yq"
-    us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaarbacra7juwrie5idcadtgbj3llxcu7p26rj4t3xujyqwwopy2wva"
-  }
-}
-*/
 
 
 # Windows images
@@ -104,15 +86,45 @@ variable "w_images" {
 
 
 
+variable "mid_tier" {
+  type = "map"
+  default = {
+    #shape      = "VM.Standard2.16"
+    shape      = "VM.Standard2.1"
+    node_count = 1
+    disk_count = 2
+    disk_size  = 50
+    hostname_prefix = "mid-tier-"
+    boot_volume_size = 50
+    }
+}
+
+# BM.DenseIO2.52 , VM.DenseIO2.24
+variable "grid" {
+  type = "map"
+  default = {
+    #shape      = "VM.DenseIO2.24"
+    shape      = "VM.Standard2.2"
+    node_count = 2
+    disk_count = 0
+    disk_size  = 50
+    hostname_prefix = "grid-"
+    cluster_name = "oci_sasgrid"
+    boot_volume_size = 100
+
+  }
+}
 
 variable "metadata" {
   type = "map"
   default = {
-    shape      = "VM.Standard2.16"
+#    shape      = "VM.Standard2.16"
+    shape      = "VM.Standard2.1"
     node_count = 1
     disk_count = 2
     disk_size  = 50
     hostname_prefix = "metadata-"
+    boot_volume_size = 50
   }
 }
 
@@ -123,47 +135,6 @@ variable mid_tier_sas_config_path { default="/sas/SASCFG" }
 variable sas_work_path { default="/sas/SASWORK" }
 variable sas_data_path { default="/gpfs/fs1" }
 
-variable nfs_mount_directory { default="/mnt/sas/nfs" }
-#
-# IMPORTANT - All the below path needs to be a sub directory under var.nfs_mount_directory.
-#
-variable grid_sas_config_path { default="/mnt/sas/nfs/SASCFG" }
-variable grid_sas_home_path { default="/mnt/sas/nfs/SASHOME" }
-variable grid_job_path { default="/mnt/sas/nfs/GRIDJOB" }
-variable lsf_home_path { default="/mnt/sas/nfs/APPLSF" }
-
-
-variable "mid_tier" {
-  type = "map"
-  default = {
-    shape      = "VM.Standard2.16"
-    node_count = 1
-    disk_count = 2
-    disk_size  = 50
-    hostname_prefix = "mid-tier-"
-    }
-}
-
-# BM.DenseIO2.52 , VM.DenseIO2.24
-variable "grid" {
-  type = "map"
-  default = {
-    shape      = "VM.DenseIO2.24"
-    node_count = 3
-    disk_count = 0
-    disk_size  = 50
-    hostname_prefix = "grid-"
-    cluster_name = "oci_sasgrid"
-  }
-}
-
-/* Used in nfs_sas.tf for target mount point */
-variable "nfs" {
-  type = "map"
-  default = {
-    hostname_prefix = "sas-nfs"
-  }
-}
 
 variable "bastion" {
   type = "map"
@@ -171,6 +142,7 @@ variable "bastion" {
     shape      = "VM.Standard2.2"
     node_count = 1
     hostname_prefix = "sas-bastion-"
+    boot_volume_size = 100
   }
 }
 
@@ -178,13 +150,123 @@ variable "remote_desktop_gateway" {
   type = "map"
   default = {
     shape      = "VM.Standard2.4"
-    node_count = 1
+    #node_count = 1
+    node_count = 0
     hostname_prefix = "rdg-"
-    boot_volume_size_in_gbs = "256"
+    boot_volume_size = 256
   }
 }
 
 
+
+
+/*
+Decide - which fs will be used as shared storage for grid home, config, lsf home and sas_depot installer files
+*/
+# valid values -  fss, nfs, gpfs, lustre
+# fss is OCI managed NFS service.
+# Use nfs for Customer managed NFS server. Support for custom NFS server will be added in future
+variable shared_storage_grid_nodes_fs_type { default="fss" }
+
+# Applicable for gpfs only - converged/non-converged.  converged should be used for Direct attached GPFS. non-converged for NSD GPFS. If using other file system, keep this variable unchanged.
+variable "converged" {
+  default = "converged"
+}
+
+
+/*
+if planning to use FSS NFS service as shared storage, if not, comment the below variables
+*/
+# Lustre:  ${mgs_ip}@tcp1:/$fsname
+# FSS/NFS: $ip:$export_path - x:x:x:x:/sas_nfs. This automation create FSS nfs file system, so no need to specify any default, keep it blank.
+# GPFS: not used
+variable mount_device_name { default="" }
+
+# Lustre:  /mnt/lustre
+# FSS/NFS: /mnt/sas/nfs
+# GPFS: /gpfs/fs1
+variable mount_directory { default="/mnt/sas/nfs" }
+#
+# IMPORTANT - All the below path needs to be a sub directory under var.mount_directory.
+#
+variable grid_sas_config_path { default="/mnt/sas/nfs/SASCFG" }
+variable grid_sas_home_path { default="/mnt/sas/nfs/SASHOME" }
+variable grid_job_path { default="/mnt/sas/nfs/GRIDJOB" }
+variable lsf_home_path { default="/mnt/sas/nfs/APPLSF" }
+
+locals {
+  mount_directory   = var.mount_directory
+  mount_device_name = (var.shared_storage_grid_nodes_fs_type == "fss" ? "${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1}" : var.mount_device_name)
+}
+
+# "nfsMountDeviceName=${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1}",
+# "mountDeviceName=${local.mount_device_name}",
+# "sharedStorageGridNodesFsType=${var.shared_storage_grid_nodes_fs_type}",
+/*
+if planning to use GPFS as shared storage, if not, comment the below variables
+*/
+/* - Commented
+
+# Lustre:  ${mgs_ip}@tcp1:/$fsname
+# FSS/NFS: $ip:$export_path
+# GPFS: not used
+variable mount_device_name { default="not-applicable" }
+
+# Lustre:  /mnt/lustre
+# FSS/NFS: /mnt/sas/nfs
+# GPFS: /gpfs/fs1
+variable mount_directory { default="/gpfs/fs1" }
+#
+# IMPORTANT - All the below path needs to be a sub directory under var.mount_directory.
+#
+variable grid_sas_config_path { default="/gpfs/fs1/SASCFG" }
+variable grid_sas_home_path { default="/gpfs/fs1/SASHOME" }
+variable grid_job_path { default="/gpfs/fs1/GRIDJOB" }
+variable lsf_home_path { default="/gpfs/fs1/APPLSF" }
+
+*/
+
+
+/*
+if planning to use Lustre as shared storage, if not, comment the below variables
+*/
+/* - Commented
+
+# Lustre:  ${mgs_ip}@tcp1:/$fsname
+# FSS/NFS: $ip:$export_path
+# GPFS: not used
+variable mount_device_name { default="1.1.1.1@tcp1:/lustrefs" }
+
+# Lustre:  /mnt/lustre
+# FSS/NFS: /mnt/sas/nfs
+# GPFS: /gpfs/fs1
+variable mount_directory { default="/mnt/lustre" }
+#
+# IMPORTANT - All the below path needs to be a sub directory under var.mount_directory.
+#
+variable grid_sas_config_path { default="/mnt/lustre/SASCFG" }
+variable grid_sas_home_path { default="/mnt/lustre/SASHOME" }
+variable grid_job_path { default="/mnt/lustre/GRIDJOB" }
+variable lsf_home_path { default="/mnt/lustre/APPLSF" }
+
+*/
+
+
+
+/*
+Only applicable for OCI FSS NFS shared storage
+Used in fss_nfs_sas.tf for target mount point
+*/
+variable "nfs" {
+  type = "map"
+  default = {
+    hostname_prefix = "sas-nfs"
+  }
+}
+
+
+
+/* This node is not created */
 variable "client_utility" {
   type = "map"
   default = {
@@ -195,48 +277,53 @@ variable "client_utility" {
 }
 
 
-
-
 /*
   Generally, this should not require a change by the deployer.
 */
 variable "platform_suite" {
   type = "map"
   default = {
-#lsf_top      = "${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1}/APPLSF"
-#lsf_top      = "/mnt/sas/nfs/APPLSF"
     js_top = "/usr/share/pm"
   }
 }
 
 
-
-variable "use_existing_vcn" {
+########################################################################################
+# This deployment happens in 4 steps and below flags are used control the execution
+# Steps
+# a. By default - Provision n/w, compute, storage for sas grid and OCI FSS NFS (if shared storage is fss) and configure linux for SAS requirements
+# b. install_configure_gpfs/install_configure_lustre - Provision GPFS or Luste resources and configure it
+# c. load_install_data - Mount Shared Storage on SAS nodes and load SASDEPOT binaries and license files, etc.
+# d. install_configure_sas - Install and Configure SAS binaries on SAS nodes
+########################################################################################
+# used to control - provisioning and configuration of resources
+# currently only supports converged direct attached architecture of GPFS. There are other automation scripts for NSD arch GPFS or client only GPFS clusters.
+variable "install_configure_gpfs" {
   default = "false"
 }
 
-variable "vcn_id" {
-  default = ""
+# used to control - provisioning and configuration of resources
+# placeholder to integrate lustre client install. There are other automation scripts for full lustre install (server+clients)
+variable "install_configure_lustre" {
+  default = "false"
 }
 
-variable "public_subnet_id" {
-  default = ""
+# used to control - provisioning and configuration of resources
+# After a shared file system is ready, set this to true to mount the shared fs and to load SAS_DEPOT binaries.
+variable "load_install_data" {
+  default = "false"
+}
+  
+# used to control - provisioning and configuration of resources
+variable "install_configure_sas" {
+  default = "false"
 }
 
-variable "private_subnet_id" {
-  default = ""
-}
-
-variable "privateb_subnet_id" {
-  default = ""
-}
 
 
-
-
-###
+###############
 # Configs which users should not be changing to deploy
-###
+###############
 
 # Generate a new strong password for sas user
 resource "random_string" "sas_user_password" {
@@ -258,4 +345,33 @@ locals {
   private_subnet_id  = var.use_existing_vcn ? var.private_subnet_id : element(concat(oci_core_subnet.private.*.id, [""]), 0)
   privateb_subnet_id = var.use_existing_vcn ? var.privateb_subnet_id : element(concat(oci_core_subnet.privateb.*.id, [""]), 0)
   client_subnet_id   = local.privateb_subnet_id
+  sas_private_subnet_id = local.is_converged ? local.private_subnet_id : local.privateb_subnet_id
 }
+
+
+locals {
+  use_fss = var.shared_storage_grid_nodes_fs_type == "fss" ? true :  false
+  phase1_install_configure_gpfs = local.use_fss ? false : (var.shared_storage_grid_nodes_fs_type == "gpfs" ? (var.install_configure_gpfs ? true : false) : false)
+  phase1_install_configure_lustre = local.use_fss ? false : (var.shared_storage_grid_nodes_fs_type == "lustre" ? (var.install_configure_lustre ? true : false) : false)
+  phase1_load_install_data = var.load_install_data ? true : false
+  phase2_install_configure_sas = var.install_configure_sas ? true : false
+  is_converged = var.converged == "converged" ? true : false
+  #gmm stands for grid+metadata+mid-tier
+  gmm_node_ids =  concat(oci_core_instance.grid.*.id, oci_core_instance.metadata.*.id, oci_core_instance.mid-tier.*.id)
+  gmm_node_private_ips =  concat(oci_core_instance.grid.*.private_ip, oci_core_instance.metadata.*.private_ip, oci_core_instance.mid-tier.*.private_ip)
+
+}
+
+
+variable "tenancy_ocid" { }
+variable "user_ocid" { }
+variable "fingerprint" { }
+variable "private_key_path" { }
+variable "region" { default = "us-phoenix-1" }
+variable "compartment_ocid" { }
+variable "ssh_public_key" { }
+variable "ssh_private_key" { }
+variable "ssh_private_key_path" { }
+
+
+

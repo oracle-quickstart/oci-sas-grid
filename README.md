@@ -12,8 +12,8 @@ Now, you'll want a local copy of this repo.  You can make that with the commands
     cd oci-sas-grid/terraform
     ls
 
-## Update variables.tf file (optional)
-This is optional, but you can update the `variables.tf` to change compute shapes, block volumes, etc. 
+## Update variables.tf file
+Make changes to `variables.tf` to change compute shapes, block volumes, etc. 
 
 ## Deployment and Post Deployment
 Deploy using standard Terraform commands. Refer to next section for how to do the deployment in 4 stages. 
@@ -22,17 +22,18 @@ Deploy using standard Terraform commands. Refer to next section for how to do th
     terraform plan
     terraform apply (see below section)
 
-![](./images/Single-Node-TF-apply.PNG)
+![](./images/TF-apply.PNG)
 
 
 ## Deployment in 4 stages 
 
 This deployment happens in 4 steps and below flags are used control the execution
 **Steps**
-a. By default, ***terraform apply*** will Provision n/w, compute, storage for sas grid and OCI FSS NFS (if shared storage is fss) and configure linux for SAS requirements
-b. After Step (a) is complete, set ***install_configure_gpfs/install_configure_lustre to true*** and run ***terraform apply*** to Provision GPFS or Luste (not both) resources and configure it
-c. After Step (b) is complete, set ***load_install_data to true*** and run ***terraform apply*** to Mount Shared Storage on SAS nodes and load SASDEPOT binaries and license files, etc.
-d. After Step (c) is complete, set ***install_configure_sas to true*** and run ***terraform apply*** to  Install and Configure SAS binaries on SAS nodes
+
+* a. By default, ***terraform apply*** will Provision n/w, compute, storage for sas grid and OCI FSS NFS (if shared storage is fss) and configure linux for SAS requirements
+* b. After Step (a) is complete, set ***install_configure_gpfs/install_configure_lustre to true*** and run ***terraform apply*** to Provision GPFS or Luste (not both) resources and configure it
+* c. After Step (b) is complete, set ***load_install_data to true*** and run ***terraform apply*** to Mount Shared Storage on SAS nodes and load SASDEPOT binaries and license files, etc.
+* d. After Step (c) is complete, set ***install_configure_sas to true*** and run ***terraform apply*** to  Install and Configure SAS binaries on SAS nodes
 
 
 ```
